@@ -170,6 +170,16 @@ while True:
             user_message = "quit"
         else:
             continue
+    except openai.error.InvalidRequestError as invalid_err:
+        print(invalid_err)
+        user_message = input(
+            "Oops, something went wrong. Do you want to drop a message and retry? (y/n): "
+        )
+        if user_message.lower() in ["n", "no"]:
+            user_message = "quit"
+        else:
+            messages.pop(0)
+            continue
 
     if user_message in ["quit", "exit", "q"]:
         t = f"{datetime.now():%Y-%m-%d_%H:%M:%S}"
