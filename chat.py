@@ -54,7 +54,7 @@ def load_data(default_prompt):
     files = [f for f in os.listdir("data") if f.endswith(".json")]
     if not files:
         print("No data files found in 'data' directory")
-        return default_prompt
+        return "", default_prompt
     # prompt user to select a file to load
     print("Available data files:")
     for i, f in enumerate(files):
