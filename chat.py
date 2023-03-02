@@ -1,12 +1,13 @@
-import os
-import json
-import readline
 from datetime import datetime
+import json
+import os
+import readline
+from typing import Dict, Tuple, List
 
 import openai
-import yaml
 from rich.console import Console
 from rich.markdown import Markdown
+import yaml
 
 
 # load configurations from config.yaml
@@ -26,7 +27,7 @@ os.environ["http_proxy"] = config["proxy"]["http_proxy"]
 os.environ["https_proxy"] = config["proxy"]["https_proxy"]
 
 
-def save_data(data, filename):
+def save_data(data: List[Dict[str, str]], filename: str) -> None:
     # save list of dict to JSON file
     currdir = os.path.dirname(os.path.abspath(__file__))
     print("current: ", currdir)
@@ -44,7 +45,7 @@ def save_data(data, filename):
     print(f"Data saved to {filepath}")
 
 
-def load_data(default_prompt):
+def load_data(default_prompt: List[Dict[str, str]]) -> Tuple[str, List[Dict[str, str]]]:
     currdir = os.path.dirname(os.path.abspath(__file__))
     print("current: ", currdir)
     datadir = os.path.join(currdir, "data")
