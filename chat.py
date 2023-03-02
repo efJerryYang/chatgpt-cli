@@ -174,12 +174,27 @@ while True:
     except openai.error.InvalidRequestError as invalid_err:
         print(invalid_err)
         user_message = input(
-            "Oops, something went wrong. Do you want to drop a message and retry? (y/n): "
+            "Oops, something went wrong. Do you want to select a message to drop and retry? (y/n): "
         )
         if user_message.lower() in ["n", "no"]:
             user_message = "quit"
         else:
-            messages.pop(0)
+            index_to_remove = []
+            print(
+                f"There are {len(messages)-1} messages in the conversation (exclude the system message):"
+            )
+            for i, msg in enumerate(messages):
+                if i == 0:
+                    # The system message should not be dropped
+                    continue
+                print(f"{i}. {msg['role']}: {msg['content']}\n")
+                drop_msg = input(f"Drop this message? (y/n): ")
+                if drop_msg.lower() in ["y", "yes"]:
+                    index_to_remove.append(i)
+                    print(f"Message {i} dropped")
+            # remove the selected messages
+            for i in sorted(index_to_remove, reverse=True):
+                messages.pop(i)
             continue
 
     if user_message in ["quit", "exit", "q"]:
