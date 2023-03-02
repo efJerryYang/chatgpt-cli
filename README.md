@@ -2,6 +2,10 @@
 
 ChatGPT CLI is a command-line interface tool that connects to the ChatGPT language model using OpenAI's official API key. With markdown support, it allows users to structure their inputs in a readable and well-organized format for future reference. Additionally, the tool saves conversations in JSON format and can be loaded when starting the tool.
 
+![demo](demo/Screenshot_20230302_222757.png)
+
+![demo2](demo/Screenshot_20230302_222926.png)
+
 ## Usage
 
 ### Prequisites
