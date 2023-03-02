@@ -160,7 +160,7 @@ while True:
     # printmd("**ChatGPT:** {}".format(assistant_message))
     assistant_output(assistant_message)
     user_message = user_input()
-    if user_message in ["quit", "exit"]:
+    if user_message in ["quit", "exit", "q"]:
         t = f"{datetime.now():%Y-%m-%d_%H:%M:%S}"
         # Do you want to save the conversation?
         save = input(f"Do you want to save the conversation? (y[es]/n[o]): ")

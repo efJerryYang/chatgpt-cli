@@ -54,6 +54,12 @@ You should have the following directory structure:
 
 The `data` directory should be created automatically the first time you run the script.
 
+You can then run the following to start using this tool. And you can exit the tool by typing `quit` during your conversation, the script will prompt you to choose storing the conversation or not.
+
+```bash
+python chat.py
+```
+
 ## Contributing
 
 If you'd like to contribute to ChatGPT CLI, please feel free to submit a pull request or open an issue!
