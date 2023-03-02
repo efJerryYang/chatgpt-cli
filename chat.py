@@ -25,6 +25,7 @@ default_prompt = config["openai"]["default_prompt"]
 os.environ["http_proxy"] = config["proxy"]["http_proxy"]
 os.environ["https_proxy"] = config["proxy"]["https_proxy"]
 
+
 def save_data(data, filename):
     # save list of dict to JSON file
     currdir = os.path.dirname(os.path.abspath(__file__))
@@ -44,6 +45,11 @@ def save_data(data, filename):
 
 
 def load_data(default_prompt):
+    currdir = os.path.dirname(os.path.abspath(__file__))
+    print("current: ", currdir)
+    datadir = os.path.join(currdir, "data")
+    if not os.path.exists(datadir):
+        os.mkdir(datadir)
     # list all JSON files in the 'data' directory
     files = [f for f in os.listdir("data") if f.endswith(".json")]
     if not files:
