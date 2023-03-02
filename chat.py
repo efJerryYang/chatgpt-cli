@@ -151,15 +151,26 @@ else:
     print("Continuing the conversation...")
 
 while True:
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
-        messages=messages,
-    )
-    assistant_message = response["choices"][0]["message"]["content"]
-    messages.append({"role": "assistant", "content": assistant_message})
-    # printmd("**ChatGPT:** {}".format(assistant_message))
-    assistant_output(assistant_message)
-    user_message = user_input()
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
+            messages=messages,
+        )
+        assistant_message = response["choices"][0]["message"]["content"]
+        messages.append({"role": "assistant", "content": assistant_message})
+        # printmd("**ChatGPT:** {}".format(assistant_message))
+        assistant_output(assistant_message)
+        user_message = user_input()
+    except openai.error.APIConnectionError as api_err:
+        print(api_err)
+        user_message = input(
+            "Oops, something went wrong. Do you want to retry? (y/n): "
+        )
+        if user_message.lower() in ["n", "no"]:
+            user_message = "quit"
+        else:
+            continue
+
     if user_message in ["quit", "exit", "q"]:
         t = f"{datetime.now():%Y-%m-%d_%H:%M:%S}"
         # Do you want to save the conversation?
