@@ -277,7 +277,7 @@ def load_data(messages: List[Dict[str, str]]) -> str:
         print(f"{i+1}. {f}")
     for a in range(3):
         selected_file = input(
-            f"Enter file number to load (1-{len(files)}), or Enter to start a fresh one: "
+            f"\nEnter file number to load (1-{len(files)}), or Enter to start a fresh one: "
         )
         if not selected_file.strip():
             return ""

@@ -35,9 +35,9 @@ pip install -r requirements.txt
 To use this tool, you will need to have a `config.yaml` in the directory you place your script `chat.py`. Here is an example:
 
 ```yaml
-# config.yaml
+# config.yaml.example
 openai:
-  api_key: <your_openai_api_key>
+  api_key: <YOUR_API_KEY>
   default_prompt:
     - role: system
       content: You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.
@@ -54,6 +54,7 @@ You should have the following directory structure:
 .
 |-- chat.py
 |-- config.yaml
+|-- config.yaml.example
 |-- data
 |   |-- example.json
 |   `-- example2.json
@@ -70,9 +71,15 @@ You can then run the following to start using this tool. And you can exit the to
 python chat.py
 ```
 
+You can submit a prompt to the ChatGPT by hitting `[Enter]` key twice, and input text with a single `[Enter]` will be interpreted as starting a newline.
+
 ## Contributing
 
 If you'd like to contribute to ChatGPT CLI, please feel free to submit a pull request or open an issue!
+
+## Reference
+
+- The hint of using `rich.panel` packages comes from [mbroton's chatgpt-api](https://github.com/mbroton/chatgpt-api)
 
 ## License
 

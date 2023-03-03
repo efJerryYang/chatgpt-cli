@@ -1,4 +1,4 @@
-# config.yaml
+# config.yaml.example
 openai:
   api_key: <YOUR_API_KEY>
   default_prompt:
