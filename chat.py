@@ -34,16 +34,33 @@ Here are some useful commands you may frequently use:
 - `!drop`: select a prompt message to drop (default: the last message)
 - `!exit` or `!quit`: exit the program
 
-You can enter these commands at any time when you are prompted to give your input.
+You can enter these commands at any time when you are prompted with `User:` during a conversation.
 
 For more detailed documentation, please visit <link_to_wiki> or <link_to_docs>
 
 Enjoy your chat!
 """
 
+
+def get_script_dir() -> str:
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+def get_data_dir() -> str:
+    return os.path.join(get_script_dir(), "data")
+
+
+def get_config_dir() -> str:
+    return get_script_dir()
+
+
+def get_config_path() -> str:
+    return os.path.join(get_config_dir(), "config.yaml")
+
+
 # set up path to config.yaml
-workdir = os.path.dirname(os.path.abspath(__file__))
-config_path = os.path.join(workdir, "config.yaml")
+script_dir = get_script_dir()
+config_path = get_config_path()
 
 # check if config file exists
 first_launch_msg = """
@@ -91,8 +108,10 @@ if "proxy" in config:
     os.environ["http_proxy"] = config["proxy"].get("http_proxy", "")
     os.environ["https_proxy"] = config["proxy"].get("https_proxy", "")
 
+console = Console()
 
-def execute_command(user_input:str):
+
+def execute_command(user_input: str):
     if user_input == "!help":
         printmd(welcome_msg)
     elif user_input == "!save":
@@ -120,30 +139,29 @@ def execute_command(user_input:str):
 
 
 def save_data(data: List[Dict[str, str]], filename: str) -> None:
-    # save list of dict to JSON file
-    currdir = os.path.dirname(os.path.abspath(__file__))
-    print("Current: ", currdir)
-    datadir = os.path.join(currdir, "data")
-    if not os.path.exists(datadir):
-        os.mkdir(datadir)
-    # if filename end with json
+    """Save list of dict to JSON file"""
+
+    data_dir = get_data_dir()
+    print("Data Directory: ", data_dir)
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
     if filename.endswith(".json"):
-        filepath = os.path.join(datadir, filename)
+        filepath = os.path.join(data_dir, filename)
     else:
-        filepath = os.path.join(datadir, filename + ".json")
+        filepath = os.path.join(data_dir, filename + ".json")
     with open(filepath, "w") as f:
         json.dump(data, f, indent=4)
     print(f"Data saved to {filepath}")
 
 
 def load_data(default_prompt: List[Dict[str, str]]) -> Tuple[str, List[Dict[str, str]]]:
-    currdir = os.path.dirname(os.path.abspath(__file__))
-    print("Current: ", currdir)
-    datadir = os.path.join(currdir, "data")
-    if not os.path.exists(datadir):
-        os.mkdir(datadir)
+    """Load JSON file from 'data' directory and return the filename and prompt"""
+    data_dir = get_data_dir()
+    print("Data Directory: ", data_dir)
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
     # list all JSON files in the 'data' directory
-    files = [f for f in os.listdir(datadir) if f.endswith(".json")]
+    files = [f for f in os.listdir(data_dir) if f.endswith(".json")]
     if not files:
         print("No data files found in 'data' directory")
         return "", default_prompt
@@ -151,27 +169,26 @@ def load_data(default_prompt: List[Dict[str, str]]) -> Tuple[str, List[Dict[str,
     print("Available data files:")
     for i, f in enumerate(files):
         print(f"{i+1}. {f}")
-    selected_file = input(
-        f"Enter file number to load (1-{len(files)}), or Enter to start a fresh one: "
-    )
-    if not selected_file:
-        return "", default_prompt
-    # validate user input and load the selected file
-    try:
-        index = int(selected_file) - 1
-        if not 0 <= index < len(files):
-            raise ValueError()
-        filepath = os.path.join(datadir, files[index])
-        with open(filepath, "r") as f:
-            data = json.load(f)
-        print(f"Data loaded from {filepath}")
-        return filepath, data
-    except (ValueError, IndexError):
-        print("Invalid input, please try again")
-        return load_data(default_prompt)
 
-
-console = Console()
+    for a in range(3):
+        selected_file = input(
+            f"Enter file number to load (1-{len(files)}), or Enter to start a fresh one: "
+        )
+        if not selected_file.strip():
+            return "", default_prompt
+        try:
+            index = int(selected_file) - 1
+            if not 0 <= index < len(files):
+                raise ValueError()
+            filepath = os.path.join(data_dir, files[index])
+            with open(filepath, "r") as f:
+                data = json.load(f)
+            print(f"Data loaded from {filepath}")
+            return filepath, data
+        except (ValueError, IndexError):
+            print("Invalid input, please try again")
+    print("Too many invalid inputs, aborting")
+    exit(1)
 
 
 def printmd(msg: str) -> None:
@@ -192,10 +209,11 @@ def user_input() -> str:
         lines.append(line)
         # Update the prompt using readline
         prompt = "\r" + " " * len(prompt) + "\r" + " .... " + readline.get_line_buffer()
-    # clear_input()
     # Print a message indicating that the input has been submitted
     msg = "\n".join(lines)
-    user_output(msg + "\n**[Input Submitted]**")
+    # handle msg in execute_command
+    # user_output(msg + "\n**[Input Submitted]**")
+    printmd("**[Input Submitted]**")
     print()
     return msg
 
@@ -212,22 +230,21 @@ def system_output(msg: str) -> None:
     printmd("**System:** {}".format(msg))
 
 
-panel = Panel(
+welcome_panel = Panel(
     Markdown(welcome_msg),
     title="ChatGPT CLI",
     border_style="green",
     expand=False,
     width=120,
 )
-print(panel)
+print(welcome_panel)
 
 default_prompt = config.get("openai", {}).get("default_prompt", None)
 if default_prompt is None:
-    default_prompt = []
-    # Warnning: the default prompt is empty
+    # Error: the default prompt is empty
     print(
         Panel(
-            "Warning: the `default prompt` is empty in `config.yaml`",
+            "Error: the `default prompt` is empty in `config.yaml`",
             title="ChatGPT CLI Setup",
             border_style="red",
             width=120,
@@ -235,46 +252,65 @@ if default_prompt is None:
     )
     exit(1)
 
+
+def display_history(messages: List[Dict[str, str]]) -> None:
+    print()
+    for msg in messages:
+        if msg["role"] == "user":
+            # printmd("**User:** {}".format(msg["content"]))
+            user_output(msg["content"])
+        elif msg["role"] == "assistant":
+            # console.print(Markdown("**ChatGPT:** {}".format(msg["content"])))
+            assistant_output(msg["content"])
+        else:  # system
+            # console.print(Markdown("**System:** {}".format(msg["content"])))
+            system_output(msg["content"])
+        # newline
+        console.print()
+
+
 filepath, messages = load_data(default_prompt)
-print()
-for msg in messages:
-    if msg["role"] == "user":
-        # printmd("**User:** {}".format(msg["content"]))
-        user_output(msg["content"])
-    elif msg["role"] == "assistant":
-        # console.print(Markdown("**ChatGPT:** {}".format(msg["content"])))
-        assistant_output(msg["content"])
-    else:  # system
-        # console.print(Markdown("**System:** {}".format(msg["content"])))
-        system_output(msg["content"])
-    # newline
-    console.print()
+display_history(messages)
 # select to response to the conversation or start a new one
 response = input(
     "Continue the conversation? You can also ask a follow up question. (y[es]/a[sk]/n[o]/q[uit]): "
 )
+print()
+
+def printpnl(msg: str, title="ChatGPT CLI", border_style="green") -> None:
+    print()
+    print(Panel(Markdown(msg), title=title, border_style=border_style, width=120))
+    print()
+
+
 if response.lower() in ["n", "no"]:
     messages = default_prompt
-    print("Starting a new conversation...")
+    printmd("**Starting a new conversation...**")
+    print()
+    display_history(default_prompt)
 elif response.lower() in ["a", "ask"]:
-    print("Ask a follow up question...")
+    printmd("**Ask a follow up question...**")
+    print()
     user_message = user_input()
     if user_message in ["q", "quit"]:
-        print("Exiting...")
+        printmd("Exiting...")
         exit()
     messages.append({"role": "user", "content": user_message})
 elif response.lower() in ["q", "quit"]:
-    print("Exiting...")
+    printmd("**Exiting...**")
     exit()
 else:
-    print("Continuing the conversation...")
+    printmd("**Continuing the conversation...**")
+    print()
+
+
 while True:
     try:
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
             messages=messages,
         )
-        assistant_message = response["choices"][0]["message"]["content"]
+        assistant_message = response["choices"][0]["message"]["content"].strip()
         messages.append({"role": "assistant", "content": assistant_message})
         # printmd("**ChatGPT:** {}".format(assistant_message))
         assistant_output(assistant_message)
@@ -290,35 +326,41 @@ while True:
             continue
     except openai.error.InvalidRequestError as invalid_err:
         print(invalid_err)
-        user_message = input(
-            "Oops, something went wrong. Do you want to select a message to drop and retry? (y/n): "
-        )
-        if user_message.lower() in ["n", "no"]:
+        if len(messages) < 0:
+            print("There is no message in the conversation")
             user_message = "quit"
         else:
-            index_to_remove = []
-            print(
-                f"There are {len(messages)-1} messages in the conversation (exclude the system message):"
+            user_message = input(
+                "Oops, something went wrong. Do you want to select a message to drop and retry? (y[es]/n[o]/q[uit]): "
             )
-            for i, msg in enumerate(messages):
-                if i == 0:
-                    # The system message should not be dropped
-                    continue
-                print(f"{i}. {msg['role']}: {msg['content']}\n")
-                drop_msg = input(f"Drop this message? (y/n): ")
-                if drop_msg.lower() in ["y", "yes"]:
-                    index_to_remove.append(i)
-                    print(f"Message {i} dropped")
-            # remove the selected messages
-            for i in sorted(index_to_remove, reverse=True):
-                messages.pop(i)
-            continue
+            if user_message.lower() in ["n", "no"]:
+                user_message = "quit"
+            else:
+                index_to_remove = []
+                print(
+                    f"There are {len(messages)-1} messages in the conversation (exclude the system message):"
+                )
+                for i, msg in enumerate(messages):
+                    if i == 0:
+                        # The system message should not be dropped
+                        continue
+                    print(f"{i}. {msg['role']}: {msg['content']}\n")
+                    drop_msg = input(f"Drop this message? (y/n): ")
+                    if drop_msg.lower() in ["y", "yes"]:
+                        index_to_remove.append(i)
+                        print(f"Message {i} dropped")
+                    else:
+                        print(f"Message {i} kept")
+                # remove the selected messages
+                for i in sorted(index_to_remove, reverse=True):
+                    messages.pop(i)
+                continue
     if user_message in ["quit", "exit", "q"]:
         t = f"{datetime.now():%Y-%m-%d_%H:%M:%S}"
         # Do you want to save the conversation?
         save = input(f"Do you want to save the conversation? (y[es]/n[o]): ")
         if save.lower() in ["n", "no"]:
-            print("Exiting...")
+            printmd("**Exiting...**")
             break
         if not filepath:
             filename = input(f"Enter a filename to save to (default to '{t}.json'): ")
@@ -338,19 +380,3 @@ while True:
         save_data(messages, filename)
         break
     messages.append({"role": "user", "content": user_message})
-
-# Todo:
-# 1. Support starting a new conversation with command `!new`
-# 2. Support markdown enable or disable with command `!md-on` or `!md-off`
-# 3. Support saving the conversation to a file with command `!save`
-# 4. Markdown support even the user input.
-# 5. Support loading a conversation from a file with command `!load`
-# 6. Allow user to regenerate last message with command `!regen`
-# 7. Allow user to drop a message with command `!drop`
-# 8. Allow user to edit a message with command `!edit`
-# 9. Allow user to change the model with command `!model`
-# add reference to the hint i got from
-# https://github.com/acheong08/ChatGPT
-# https://github.com/mmabrouk/chatgpt-wrapper
-# !help to start a new terminal with help info but the previous one shoule not be overriden
-# Avoid [Ctrl]+[C] to interupt the input and prompt the user with a confirmation
