@@ -1,0 +1,9 @@
+# config.yaml
+openai:
+  api_key: <YOUR_API_KEY>
+  default_prompt:
+    - role: system
+      content: You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.
+proxy:
+  http_proxy: http://127.0.0.1:7890
+  https_proxy: http://127.0.0.1:7890

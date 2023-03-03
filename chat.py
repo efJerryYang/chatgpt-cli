@@ -7,30 +7,100 @@ from typing import Dict, Tuple, List
 
 import openai
 import yaml
+import rich
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
+from rich import print
 
-# load configurations from config.yaml
+welcome_msg = """
+# Welcome to ChatGPT CLI!
+
+Greetings! Thank you for choosing this CLI tool. This tool is generally developed for personal use purpose.
+
+We use OpenAI's official API to interact with the ChatGPT, which would be more stable than the web interface.
+
+This tool is still under development, and we are working on improving the user experience. 
+
+If you have any suggestions, please feel free to open an issue on our [GitHub](https://github.com/efJerryYang/chatgpt-cli/issues)
+
+Here are some useful commands you may frequently use:
+
+- `!help`: show this message
+- `!save`: save the conversation to a `JSON` file
+- `!load`: load a conversation from a `JSON` file
+- `!new`: start a new conversation
+- `!regen`: regenerate the last response
+- `!edit`: select a prompt message to edit (default: the last message)
+- `!drop`: select a prompt message to drop (default: the last message)
+- `!exit` or `!quit`: exit the program
+
+You can enter these commands at any time when you are prompted to give your input.
+
+For more detailed documentation, please visit <link_to_wiki> or <link_to_docs>
+
+Enjoy your chat!
+"""
+
+# set up path to config.yaml
 dir = os.path.dirname(os.path.abspath(__file__))
 config_path = os.path.join(dir, "config.yaml")
+
+# check if config file exists
+first_launch_msg = """
+# Welcome to ChatGPT CLI!
+
+It looks like this is the first time you're using this tool.
+
+To use the ChatGPT API you need to provide your OpenAI API key in the `config.yaml` file.
+
+To get started, please follow these steps:
+
+1. Copy the `config.yaml.example` file to `config.yaml` in the same directory.
+2. Open `config.yaml` using a text editor an replace `<YOUR_API_KEY>` with your actual OpenAI API key.
+3. Optionally, you can also set a default prompt to use for generating your GPT output.
+
+If you don't have an OpenAI API key, you can get one at https://platform.openai.com/account/api-keys/.
+
+Once you've configured your `config.yaml` file, you can start this tool again.
+
+
+
+Thank you for using ChatGPT CLI!
+"""
+if not os.path.exists(config_path):
+    print(
+        Panel(
+            Markdown(first_launch_msg),
+            title="ChatGPT CLI Setup",
+            border_style="red",
+            width=120,
+        )
+    )
+    exit(1)
+
+# load configurations from config.yaml
 with open(config_path, "r") as f:
     try:
         config = yaml.safe_load(f)
     except yaml.YAMLError:
         print("Error in configuration file:", config_path)
         exit(1)
+
+# set up openai API key and system prompt
 openai.api_key = config["openai"]["api_key"]
-default_prompt = config["openai"]["default_prompt"]
-# set proxy
-os.environ["http_proxy"] = config["proxy"]["http_proxy"]
-os.environ["https_proxy"] = config["proxy"]["https_proxy"]
+default_prompt = config.get("openai", {}).get("default_prompt", None)
+
+# set proxy if defined
+if "proxy" in config:
+    os.environ["http_proxy"] = config["proxy"].get("http_proxy", "")
+    os.environ["https_proxy"] = config["proxy"].get("https_proxy", "")
 
 
 def save_data(data: List[Dict[str, str]], filename: str) -> None:
     # save list of dict to JSON file
     currdir = os.path.dirname(os.path.abspath(__file__))
-    print("current: ", currdir)
+    print("Current: ", currdir)
     datadir = os.path.join(currdir, "data")
     if not os.path.exists(datadir):
         os.mkdir(datadir)
@@ -46,7 +116,7 @@ def save_data(data: List[Dict[str, str]], filename: str) -> None:
 
 def load_data(default_prompt: List[Dict[str, str]]) -> Tuple[str, List[Dict[str, str]]]:
     currdir = os.path.dirname(os.path.abspath(__file__))
-    print("current: ", currdir)
+    print("Current: ", currdir)
     datadir = os.path.join(currdir, "data")
     if not os.path.exists(datadir):
         os.mkdir(datadir)
@@ -99,11 +169,11 @@ def user_input() -> str:
             break
         lines.append(line)
         # Update the prompt using readline
-        prompt = "\r" + " " * len(prompt) + "\r" + ".... " + readline.get_line_buffer()
+        prompt = "\r" + " " * len(prompt) + "\r" + " .... " + readline.get_line_buffer()
     # clear_input()
     # Print a message indicating that the input has been submitted
     msg = "\n".join(lines)
-    user_output(msg + " **[Input Submitted]**")
+    user_output(msg + "\n**[Input Submitted]**")
     print()
     return msg
 
@@ -119,6 +189,15 @@ def assistant_output(msg: str) -> None:
 def system_output(msg: str) -> None:
     printmd("**System:** {}".format(msg))
 
+
+panel = Panel(
+    Markdown(welcome_msg),
+    title="ChatGPT CLI",
+    border_style="green",
+    expand=False,
+    width=120,
+)
+rich.print(panel)
 
 filepath, messages = load_data(default_prompt)
 print()
