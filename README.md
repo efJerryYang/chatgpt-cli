@@ -4,6 +4,8 @@ ChatGPT CLI is a command-line interface tool that connects to the ChatGPT langua
 
 Additionally, the tool saves conversations in JSON format and can be loaded when it starts.
 
+> **NOTICE:** The demo below is **not up-to-date**, you can try out the new features (command options like `!help`, `!show`, `!edit`, `!drop` and so on yourself!)
+
 A simple demo here:
 
 ![demo](demo/Screenshot_20230302_222757.png)
