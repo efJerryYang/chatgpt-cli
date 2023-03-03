@@ -7,7 +7,6 @@ from typing import Dict, Tuple, List
 
 import openai
 import yaml
-import rich
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
@@ -43,8 +42,8 @@ Enjoy your chat!
 """
 
 # set up path to config.yaml
-dir = os.path.dirname(os.path.abspath(__file__))
-config_path = os.path.join(dir, "config.yaml")
+workdir = os.path.dirname(os.path.abspath(__file__))
+config_path = os.path.join(workdir, "config.yaml")
 
 # check if config file exists
 first_launch_msg = """
@@ -63,8 +62,6 @@ To get started, please follow these steps:
 If you don't have an OpenAI API key, you can get one at https://platform.openai.com/account/api-keys/.
 
 Once you've configured your `config.yaml` file, you can start this tool again.
-
-
 
 Thank you for using ChatGPT CLI!
 """
@@ -89,12 +86,37 @@ with open(config_path, "r") as f:
 
 # set up openai API key and system prompt
 openai.api_key = config["openai"]["api_key"]
-default_prompt = config.get("openai", {}).get("default_prompt", None)
-
 # set proxy if defined
 if "proxy" in config:
     os.environ["http_proxy"] = config["proxy"].get("http_proxy", "")
     os.environ["https_proxy"] = config["proxy"].get("https_proxy", "")
+
+
+def execute_command(user_input:str):
+    if user_input == "!help":
+        printmd(welcome_msg)
+    elif user_input == "!save":
+        save_data(prompt, filename)
+    elif user_input == "!load":
+        filename, prompt = load_data(prompt)
+    elif user_input == "!new":
+        filename = ""
+        prompt = default_prompt
+    elif user_input == "!regen":
+        prompt = prompt[:-1]
+        prompt.append(prompt[-1])
+        printmd(prompt[-1]["text"])
+    elif user_input == "!edit":
+        prompt = edit_prompt(prompt)
+    elif user_input == "!drop":
+        prompt = drop_prompt(prompt)
+    elif user_input == "!exit" or user_input == "!quit":
+        print("Bye!")
+        exit(0)
+    elif user_input.startswith("!"):
+        print("Invalid command, please try again")
+    else:
+        return False
 
 
 def save_data(data: List[Dict[str, str]], filename: str) -> None:
@@ -197,7 +219,21 @@ panel = Panel(
     expand=False,
     width=120,
 )
-rich.print(panel)
+print(panel)
+
+default_prompt = config.get("openai", {}).get("default_prompt", None)
+if default_prompt is None:
+    default_prompt = []
+    # Warnning: the default prompt is empty
+    print(
+        Panel(
+            "Warning: the `default prompt` is empty in `config.yaml`",
+            title="ChatGPT CLI Setup",
+            border_style="red",
+            width=120,
+        )
+    )
+    exit(1)
 
 filepath, messages = load_data(default_prompt)
 print()
@@ -302,3 +338,19 @@ while True:
         save_data(messages, filename)
         break
     messages.append({"role": "user", "content": user_message})
+
+# Todo:
+# 1. Support starting a new conversation with command `!new`
+# 2. Support markdown enable or disable with command `!md-on` or `!md-off`
+# 3. Support saving the conversation to a file with command `!save`
+# 4. Markdown support even the user input.
+# 5. Support loading a conversation from a file with command `!load`
+# 6. Allow user to regenerate last message with command `!regen`
+# 7. Allow user to drop a message with command `!drop`
+# 8. Allow user to edit a message with command `!edit`
+# 9. Allow user to change the model with command `!model`
+# add reference to the hint i got from
+# https://github.com/acheong08/ChatGPT
+# https://github.com/mmabrouk/chatgpt-wrapper
+# !help to start a new terminal with help info but the previous one shoule not be overriden
+# Avoid [Ctrl]+[C] to interupt the input and prompt the user with a confirmation
