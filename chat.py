@@ -29,9 +29,14 @@ def get_config_path() -> str:
     return os.path.join(get_config_dir(), "config.yaml")
 
 
-def printpnl(msg: str, title="ChatGPT CLI", border_style="green", width=120) -> None:
+def printpnl(
+    msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
+) -> None:
     print()
-    print(Panel(Markdown(msg), title=title, border_style=border_style, width=width))
+    if markdown:
+        print(Panel(Markdown(msg), title=title, border_style=border_style, width=width))
+    else:
+        print(Panel(msg, title=title, border_style=border_style, width=width))
     print()
 
 
@@ -95,16 +100,36 @@ def is_command(user_input: str) -> bool:
     return user_input.startswith("!") or user_input in quit_words
 
 
-def save_current_conversation(messages: List[Dict[str, str]], filepath: str) -> None:
+def save_current_conversation(
+    messages: List[Dict[str, str]],
+    filepath: str,
+    default_prompt: List[Dict[str, str]],
+    enable_prompt: bool = True,
+) -> None:
+    """Save current conversation to a file"""
+    # Ask user to make sure they want to save
+    if enable_prompt:
+        user_message = input("Do you want to save this conversation? [y/n]: ")
+        if user_message.lower() == "n":
+            printmd("**Conversation not saved.**")
+            return
+    # Check if this conversation is the same as the default_prompt
+    if is_same_message(messages, default_prompt):
+        printmd(
+            "**This conversation is the same as the default prompt. Nothing to save.**"
+        )
+        return
+    # Save conversation
     if filepath:
         save_data(messages, os.path.basename(filepath))
     else:
         t = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
         tmp = f"conversation_{t}.json"
-        filename = input(f"Enter filename to save conversation [{tmp}]: ").strip()
+        filename = input(f"Enter filename to save to [{tmp}]: ").strip()
         if not filename:
             filename = tmp
         save_data(messages, filename)
+    printmd("**Conversation saved.**")
 
 
 def load_existing_conversation(
@@ -122,20 +147,60 @@ def start_new_converstation(
     messages.extend(list(default_prompt))
 
 
-def regenerate_last_response():
-    printpnl("## This option is not supported yet.", "Not Implemented", "red", 120)
+def regenerate_last_response(messages: List[Dict[str, str]]):
+    """Regenerate last response"""
+    last_msg = messages[-1]
+    if last_msg["role"] == "user":
+        printmd("**You can't regenerate your own response. You may want to drop it first.**")
+        return
+    # Regenerate last response
+    messages[-1]["content"] = generate_response(messages)
+    assistant_output(messages[-1]["content"])
+    printmd("**Last response regenerated.**")
 
 
-def select_prompt_from_messages():
-    printpnl("## This option is not supported yet.", "Not Implemented", "red", 120)
+def edit_messages(messages: List[Dict[str, str]]) -> None:
+    for i in range(len(messages)):
+        msg = messages[i]
+        printpnl(
+            f"{i}. {msg['role']}: {msg['content']}\n", "Editing Messages", "yellow"
+        )
+        print("Enter new message (or Enter to skip).")
+        new_msg = user_input()
+        if new_msg:
+            messages[i]["content"] = new_msg
+            printmd("**Message updated.**\n")
+        else:
+            printmd("**Message not updated.**\n")
+    printpnl("## Done.", "Editing Messages", "white", 120)
 
 
-def edit_selected_prompt():
-    printpnl("## This option is not supported yet.", "Not Implemented", "red", 120)
+def select_from_messages(messages: List[Dict[str, str]]) -> List[int]:
+    index_list = []
+    for i, msg in enumerate(messages):
+        printpnl(
+            f"{i}. {msg['role']}: {msg['content']}\n", "Selecting Messages", "yellow"
+        )
+        index = input("Select this message to drop? [y/n]: ").strip()
+        if index.lower() == "y":
+            index_list.append(i)
+            printmd("**Message selected.**\n")
+        else:
+            printmd("**Message not selected.**\n")
+    return index_list
 
 
-def drop_selected_prompt():
-    printpnl("## This option is not supported yet.", "Not Implemented", "red", 120)
+def drop_selected_messages(messages: list[Dict[str, str]], index_list: List[int]):
+    for i in sorted(index_list, reverse=True):
+        msg = messages[i]
+        printpnl(f"{i}. {msg['role']}: {msg['content']}\n", "Dropping Messages", "yellow")
+        index = input("Drop this message? [y/n]: ").strip()
+        if index.lower() == "y":
+            messages.pop(i)
+            printmd("**Message dropped.**\n")
+        else:
+            printmd("**Message not dropped.**\n")
+    printpnl("## Done.", "Dropping Messages", "white", 120)
 
 
 def execute_command(
@@ -147,24 +212,29 @@ def execute_command(
     user_input = user_input.strip()
     if user_input == "!help":
         show_welcome_panel()
+    elif user_input == "!show":
+        display_history(messages)
     elif user_input == "!save":
-        save_current_conversation(messages, filepath)
+        # examine whether the conetent is the same as default_prompt
+        # ask user to check if save current file
+        save_current_conversation(messages, filepath, default_prompt, False)
     elif user_input == "!load":
-        save_current_conversation(messages, filepath)
+        save_current_conversation(messages, filepath, default_prompt)
         filepath = load_existing_conversation(messages, default_prompt)
+        display_history(messages)
     elif user_input == "!new":
-        save_current_conversation(messages, filepath)
+        save_current_conversation(messages, filepath, default_prompt)
         start_new_converstation(messages, default_prompt)
+        display_history(messages)
     elif user_input == "!regen":
         regenerate_last_response()
     elif user_input == "!edit":
-        select_prompt_from_messages()
-        edit_selected_prompt()
+        edit_messages(messages)
     elif user_input == "!drop":
-        select_prompt_from_messages()
-        drop_selected_prompt()
+        index_list = select_from_messages(messages)
+        drop_selected_messages(messages, index_list)
     elif user_input in ["!exit", "!quit", "quit", "exit"]:
-        save_current_conversation(messages, filepath)
+        save_current_conversation(messages, filepath, default_prompt)
         print("Bye!")
         exit(0)
     elif user_input.startswith("!"):
@@ -232,8 +302,6 @@ console = Console()
 
 
 def printmd(msg: str, newline=True) -> None:
-    if newline:
-        print()
     console.print(Markdown(msg))
     if newline:
         print()
@@ -270,39 +338,36 @@ def assistant_output(msg: str) -> None:
 
 
 def system_output(msg: str) -> None:
-    printmd("**System Prompt:** {}".format(msg))
+    printmd("**System Prompt to ChatGPT:** {}".format(msg))
 
 
 def show_welcome_panel():
     welcome_msg = """
-# Welcome to ChatGPT CLI!
+Welcome to ChatGPT CLI!
 
-Greetings! Thank you for choosing this CLI tool. This tool is generally developed for personal use purpose.
+Greetings! Thank you for choosing this CLI tool. This tool is generally developed for personal use purpose. We use OpenAI's official API to interact with the ChatGPT, which would be more stable than the web interface.
 
-We use OpenAI's official API to interact with the ChatGPT, which would be more stable than the web interface.
+This tool is still under development, and we are working on improving the user experience. If you have any suggestions, please feel free to open an issue on our GitHub: https://github.com/efJerryYang/chatgpt-cli/issues
 
-This tool is still under development, and we are working on improving the user experience. 
-
-If you have any suggestions, please feel free to open an issue on our [GitHub](https://github.com/efJerryYang/chatgpt-cli/issues)
-
-Here are some useful commands you may frequently use:
+Here are some useful commands you may want to use:
 
 - `!help`: show this message
-- `!save`: save the conversation to a `JSON` file
+- `!show`: show current conversation messages
+- `!save`: save current conversation to a `JSON` file
 - `!load`: load a conversation from a `JSON` file
 - `!new`: start a new conversation
 - `!regen`: regenerate the last response
-- `!edit`: select a prompt message to edit (default: the last message)
-- `!drop`: select a prompt message to drop (default: the last message)
+- `!edit`: select a message to edit
+- `!drop`: select a message to drop
 - `!exit` or `!quit`: exit the program
 
-You can enter these commands at any time when you are prompted with `User:` during a conversation.
+You can enter these commands at any time during a conversation when you are prompted with `User:`.
 
 For more detailed documentation, please visit <link_to_wiki> or <link_to_docs>
 
 Enjoy your chat!
 """
-    printpnl(welcome_msg, title="Welcome to ChatGPT CLI!")
+    printpnl(welcome_msg, title="Welcome")
 
 
 def display_history(messages: List[Dict[str, str]]) -> None:
@@ -335,6 +400,28 @@ def is_same_message(
     return True
 
 
+def generate_response(messages: List[Dict[str, str]]) -> str:
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
+            messages=messages,
+        )
+        assistant_message = response["choices"][0]["message"]["content"].strip()
+        return assistant_message
+    except openai.error.APIConnectionError as api_err:
+        print(api_err)
+        user_message = input(
+            "Oops, something went wrong. Do you want to retry? (y/n): "
+        )
+        if user_message.strip().lower() == "y":
+            return generate_response(messages)
+        else:
+            return ""
+    except openai.error.InvalidRequestError as invalid_err:
+        print(invalid_err)
+        printpnl("**[Invalid Request]**\nPlease revise your messages according to the error message above.")
+        return ""
+
 if __name__ == "__main__":
     config = setup_runtime_env()
     default_prompt = config["openai"]["default_prompt"]
@@ -352,52 +439,10 @@ if __name__ == "__main__":
         else:
             messages.append({"role": "user", "content": user_message})
 
-        try:
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
-                messages=messages,
-            )
-            assistant_message = response["choices"][0]["message"]["content"].strip()
-            messages.append({"role": "assistant", "content": assistant_message})
+        assistant_message = generate_response(messages)
+        if assistant_message:
             assistant_output(assistant_message)
+            messages.append({"role": "assistant", "content": assistant_message})
             continue
-        except openai.error.APIConnectionError as api_err:
-            print(api_err)
-            user_message = input(
-                "Oops, something went wrong. Do you want to retry? (y/n): "
-            )
-            if user_message.lower() in ["n", "no"]:
-                user_message = "quit"
-            else:
-                continue
-        except openai.error.InvalidRequestError as invalid_err:
-            print(invalid_err)
-            if len(messages) < 0:
-                print("There is no message in the conversation")
-                user_message = "quit"
-            else:
-                user_message = input(
-                    "Oops, something went wrong. Do you want to select a message to drop and retry? (y[es]/n[o]/q[uit]): "
-                )
-                if user_message.lower() in ["n", "no"]:
-                    user_message = "quit"
-                else:
-                    index_to_remove = []
-                    print(
-                        f"There are {len(messages)-1} messages in the conversation (exclude the system message):"
-                    )
-                    for i, msg in enumerate(messages):
-                        if i == 0:
-                            # The system message should not be dropped
-                            continue
-                        print(f"{i}. {msg['role']}: {msg['content']}\n")
-                        drop_msg = input(f"Drop this message? (y/n): ")
-                        if drop_msg.lower() in ["y", "yes"]:
-                            index_to_remove.append(i)
-                            print(f"Message {i} dropped")
-                        else:
-                            print(f"Message {i} kept")
-                    # remove the selected messages
-                    for i in sorted(index_to_remove, reverse=True):
-                        messages.pop(i)
-                    continue
+        else:
+            save_current_conversation(messages, filepath, default_prompt)
