@@ -2,13 +2,14 @@ from datetime import datetime
 import json
 import os
 import readline
+import sys
 from typing import Dict, Tuple, List
 
 import openai
+import yaml
 from rich.console import Console
 from rich.markdown import Markdown
-import yaml
-
+from rich.panel import Panel
 
 # load configurations from config.yaml
 dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,7 +20,6 @@ with open(config_path, "r") as f:
     except yaml.YAMLError:
         print("Error in configuration file:", config_path)
         exit(1)
-
 openai.api_key = config["openai"]["api_key"]
 default_prompt = config["openai"]["default_prompt"]
 # set proxy
@@ -32,7 +32,6 @@ def save_data(data: List[Dict[str, str]], filename: str) -> None:
     currdir = os.path.dirname(os.path.abspath(__file__))
     print("current: ", currdir)
     datadir = os.path.join(currdir, "data")
-
     if not os.path.exists(datadir):
         os.mkdir(datadir)
     # if filename end with json
@@ -52,7 +51,7 @@ def load_data(default_prompt: List[Dict[str, str]]) -> Tuple[str, List[Dict[str,
     if not os.path.exists(datadir):
         os.mkdir(datadir)
     # list all JSON files in the 'data' directory
-    files = [f for f in os.listdir("data") if f.endswith(".json")]
+    files = [f for f in os.listdir(datadir) if f.endswith(".json")]
     if not files:
         print("No data files found in 'data' directory")
         return "", default_prompt
@@ -70,7 +69,7 @@ def load_data(default_prompt: List[Dict[str, str]]) -> Tuple[str, List[Dict[str,
         index = int(selected_file) - 1
         if not 0 <= index < len(files):
             raise ValueError()
-        filepath = os.path.join("data", files[index])
+        filepath = os.path.join(datadir, files[index])
         with open(filepath, "r") as f:
             data = json.load(f)
         print(f"Data loaded from {filepath}")
@@ -101,9 +100,12 @@ def user_input() -> str:
         lines.append(line)
         # Update the prompt using readline
         prompt = "\r" + " " * len(prompt) + "\r" + ".... " + readline.get_line_buffer()
+    # clear_input()
     # Print a message indicating that the input has been submitted
-    print("[Input Submitted]\n")
-    return "\n".join(lines)
+    msg = "\n".join(lines)
+    user_output(msg + " **[Input Submitted]**")
+    print()
+    return msg
 
 
 def user_output(msg: str) -> None:
@@ -119,7 +121,6 @@ def system_output(msg: str) -> None:
 
 
 filepath, messages = load_data(default_prompt)
-
 print()
 for msg in messages:
     if msg["role"] == "user":
@@ -133,7 +134,6 @@ for msg in messages:
         system_output(msg["content"])
     # newline
     console.print()
-
 # select to response to the conversation or start a new one
 response = input(
     "Continue the conversation? You can also ask a follow up question. (y[es]/a[sk]/n[o]/q[uit]): "
@@ -144,13 +144,15 @@ if response.lower() in ["n", "no"]:
 elif response.lower() in ["a", "ask"]:
     print("Ask a follow up question...")
     user_message = user_input()
+    if user_message in ["q", "quit"]:
+        print("Exiting...")
+        exit()
     messages.append({"role": "user", "content": user_message})
 elif response.lower() in ["q", "quit"]:
     print("Exiting...")
     exit()
 else:
     print("Continuing the conversation...")
-
 while True:
     try:
         response = openai.ChatCompletion.create(
@@ -196,7 +198,6 @@ while True:
             for i in sorted(index_to_remove, reverse=True):
                 messages.pop(i)
             continue
-
     if user_message in ["quit", "exit", "q"]:
         t = f"{datetime.now():%Y-%m-%d_%H:%M:%S}"
         # Do you want to save the conversation?
