@@ -523,4 +523,4 @@ if __name__ == "__main__":
             conv.add_assistant_message(assistant_message)
             continue
         else:
-            conv.save()
+            conv.save(True)
