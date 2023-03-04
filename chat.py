@@ -100,6 +100,62 @@ def is_command(user_input: str) -> bool:
     return user_input.startswith("!") or user_input in quit_words
 
 
+def save_data(data: List[Dict[str, str]], filename: str) -> None:
+    """Save list of dict to JSON file"""
+
+    data_dir = get_data_dir()
+    print("Data Directory: ", data_dir)
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
+    if filename.endswith(".json"):
+        filepath = os.path.join(data_dir, filename)
+    else:
+        filepath = os.path.join(data_dir, filename + ".json")
+    with open(filepath, "w") as f:
+        json.dump(data, f, indent=4)
+    print(f"Data saved to {filepath}")
+
+
+def load_data(messages: List[Dict[str, str]]) -> str:
+    """Load JSON file from 'data' directory to 'messages', and return the filepath"""
+
+    data_dir = get_data_dir()
+    print("Data Directory: ", data_dir)
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
+
+    files = [f for f in os.listdir(data_dir) if f.endswith(".json")]
+    if not files:
+        print("No data files found in 'data' directory")
+        return ""
+
+    # prompt user to select a file to load
+    print("Available data files:\n")
+    for i, f in enumerate(files):
+        print(f"{i+1}. {f}")
+    for a in range(3):
+        selected_file = input(
+            f"\nEnter file number to load (1-{len(files)}), or Enter to start a fresh one: "
+        )
+        if not selected_file.strip():
+            return ""
+        try:
+            index = int(selected_file) - 1
+            if not 0 <= index < len(files):
+                raise ValueError()
+            filepath = os.path.join(data_dir, files[index])
+            with open(filepath, "r") as f:
+                data = json.load(f)
+                messages.clear()
+                messages.extend(data)
+            print(f"Data loaded from {filepath}")
+            return filepath
+        except (ValueError, IndexError):
+            print("Invalid input, please try again")
+    print("Too many invalid inputs, aborting")
+    exit(1)
+
+
 class Conversation:
     def __init__(self, default_prompt: List[Dict[str, str]]) -> None:
         self.messages = list(default_prompt)
@@ -109,20 +165,6 @@ class Conversation:
 
     def __len__(self) -> int:
         return len(self.messages)
-
-    def __getitem__(self, index: int) -> Dict[str, str]:
-        return self.messages[index]
-
-    def __setitem__(self, index: int, value: Dict[str, str]) -> None:
-        self.messages[index] = value
-        self.modified = True
-
-    def __delitem__(self, index: int) -> None:
-        del self.messages[index]
-        self.modified = True
-
-    def __iter__(self):
-        return iter(self.messages)
 
     def __add_message(self, message: Dict[str, str]) -> None:
         self.messages.append(message)
@@ -159,6 +201,7 @@ class Conversation:
                     filename = tmp
             printmd(f"**Conversation save to [{filename}].**")
             save_data(self.messages, filename)
+            self.modified = False
         else:
             printmd("**Conversation not modified. Nothing to save.**")
 
@@ -251,7 +294,7 @@ class Conversation:
             return
         # Show messages history with index to select, or iterate through them one by one?
         choose = input(
-            "Show messages history with index to select, or iterate through them one by one? [i/o]: "
+            "Show messages history with [i]ndex to select, or iterate [t]hrough them one by one? [i/t]: "
         ).strip()
         if choose.lower() == "i":
             # Show messages history with index to select
@@ -347,62 +390,6 @@ def execute_command(
     return user_input
 
 
-def save_data(data: List[Dict[str, str]], filename: str) -> None:
-    """Save list of dict to JSON file"""
-
-    data_dir = get_data_dir()
-    print("Data Directory: ", data_dir)
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
-    if filename.endswith(".json"):
-        filepath = os.path.join(data_dir, filename)
-    else:
-        filepath = os.path.join(data_dir, filename + ".json")
-    with open(filepath, "w") as f:
-        json.dump(data, f, indent=4)
-    print(f"Data saved to {filepath}")
-
-
-def load_data(messages: List[Dict[str, str]]) -> str:
-    """Load JSON file from 'data' directory to 'messages', and return the filepath"""
-
-    data_dir = get_data_dir()
-    print("Data Directory: ", data_dir)
-    if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
-
-    files = [f for f in os.listdir(data_dir) if f.endswith(".json")]
-    if not files:
-        print("No data files found in 'data' directory")
-        return ""
-
-    # prompt user to select a file to load
-    print("Available data files:\n")
-    for i, f in enumerate(files):
-        print(f"{i+1}. {f}")
-    for a in range(3):
-        selected_file = input(
-            f"\nEnter file number to load (1-{len(files)}), or Enter to start a fresh one: "
-        )
-        if not selected_file.strip():
-            return ""
-        try:
-            index = int(selected_file) - 1
-            if not 0 <= index < len(files):
-                raise ValueError()
-            filepath = os.path.join(data_dir, files[index])
-            with open(filepath, "r") as f:
-                data = json.load(f)
-                messages.clear()
-                messages.extend(data)
-            print(f"Data loaded from {filepath}")
-            return filepath
-        except (ValueError, IndexError):
-            print("Invalid input, please try again")
-    print("Too many invalid inputs, aborting")
-    exit(1)
-
-
 console = Console()
 
 
@@ -473,8 +460,8 @@ Here are some useful commands you may want to use:
 - `!new` or `!reset`: start a new conversation
 - `!regen`: regenerate the last response
 - `!resend`: resend your last prompt to generate response
-- `!edit`: select a message to edit
-- `!drop`: select a message to drop
+- `!edit`: select messages to edit
+- `!drop`: select messages to drop
 - `!exit` or `!quit`: exit the program
 
 You can enter these commands at any time during a conversation when you are prompted with `User:`.
