@@ -1,22 +1,33 @@
 # ChatGPT CLI
 
-ChatGPT CLI is a command-line interface tool that connects to the ChatGPT language model using OpenAI's official API key. With markdown support, it allows you to structure the inputs in a readable and well-organized format for future reference.
+ChatGPT CLI is a command-line interface tool that connects to the ChatGPT language model using OpenAI's official API key. With markdown support, it allows you to structure your inputs in a readable and well-organized format for future reference.
 
-Additionally, the tool saves conversations in JSON format and can be loaded when it starts.
+Additionally, the tool saves conversations in JSON format and loads them when it starts.
 
-> **Notice:** The demo below is **not up-to-date**, you can try out the new features (command options like `!help`, `!show`, `!edit`, `!drop` and so on) yourself!
+We've provided serveral commands to help you use this tool more conveniently:
 
-A simple demo here:
+- `!help`: shows the help message
+- `!show`: displays the current conversation messages
+- `!save`: saves the current conversation to a `JSON` file
+- `!load`: loads a conversation from a `JSON` file
+- `!new` or `!reset`: starts a new conversation
+- `!regen`: regenerates the last response
+- `!resend`: resends your last prompt to generate response
+- `!edit`: selects messages for editing
+- `!drop`: selects messages for deletion
+- `!exit` or `!quit`: exits the program
 
-![demo](demo/Screenshot_20230302_222757.png)
+These commands are designed to enable you to use this tool much like you would use the official Web client. If you find that you need additinal command support, please feel free to open an issue.
 
-![demo2](demo/Screenshot_20230302_222926.png)
+Below is a simple demonstration of using this tool:
+
+<!-- <insert gif> -->
 
 ## Usage
 
 ### Prequisites
 
-To use ChatGPT CLI, you'll need to have `Python` installed on your machine. `Python` version over `3.11.2` is supported, and the older version may also work.
+To use ChatGPT CLI, you'll need to have `Python` installed on your machine. `Python` version `3.11.2` or later is supported, but older versions may work as well.
 
 You'll also need an OpenAI API key (which you can [get here](https://platform.openai.com/account/api-keys)).
 
@@ -67,22 +78,29 @@ You should have the following directory structure:
 
 The `data` directory should be created automatically the first time you run the script.
 
-You can then run the following to start using this tool. And you can exit the tool by typing `quit` during your conversation, the script will prompt you to choose storing the conversation or not.
+You can then run the following to start using this tool. And you can exit the tool by typing `!quit` command during your conversation, the script will prompt you to choose storing the conversation or not. (`quit` command in previous version is also supported till now)
 
 ```bash
 python chat.py
 ```
 
-You can submit a prompt to the ChatGPT by hitting `[Enter]` key twice, and input text with a single `[Enter]` will be interpreted as starting a newline.
+To send a prompt to ChatGPT, simply hit the `[Enter]` key twice after your message. If you press `[Enter]` only once, it will create a new line, but if the message is blank, it will also be submitted to ChatGPT. Please note that if you submit an empty message, only the stripped empty string will be sent directly to ChatGPT without any prompts.
+
+## Todos
+
+- [ ] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
+- [ ] Count tokens in conversation and display the total number
+- [ ] Generate a summary of the conversation to reduce token usage
 
 ## Contributing
 
 If you'd like to contribute to ChatGPT CLI, please feel free to submit a pull request or open an issue!
 
-## Reference
+## References
 
-- The hint of using `rich.panel` packages comes from [mbroton's chatgpt-api](https://github.com/mbroton/chatgpt-api)
+- The idea of using the `rich.panel` package comes from [mbroton's chatgpt-api](https://github.com/mbroton/chatgpt-api).
+<!-- - The !summarize command for generating a summary of the current conversation to guide the user in continuing the conversation is inspired by 沙漏/u202e. -->
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -43,7 +43,7 @@ def printpnl(
 def load_config() -> Dict:
     # check if config file exists
     first_launch_msg = """
-# Welcome to ChatGPT CLI!
+Welcome to ChatGPT CLI!
 
 It looks like this is the first time you're using this tool.
 
@@ -234,10 +234,10 @@ class Conversation:
         # Resend last prompt
         last_message = self.messages[-1]
         if last_message["role"] == "user":
-            self.messages[-1]["content"] = generate_response(self.messages)
-            self.modified = True
+            assistant_message = generate_response(self.messages)
+            self.add_assistant_message(assistant_message)
             printmd("**Last prompt resent.**")
-            assistant_output(self.messages[-1]["content"])
+            assistant_output(assistant_message)
         else:
             printmd("**Last message is assistant message. Nothing to resend.**")
 
@@ -256,10 +256,15 @@ class Conversation:
                 "**Last message is user message. Nothing to regenerate. You may want to use `!resend` instead.**"
             )
             return
-        self.messages[-1]["content"] = generate_response(self.messages[:-1])
-        self.modified = True
+        content = generate_response(self.messages[:-1])
+        self.__fill_content(- 1, content)
         assistant_output(self.messages[-1]["content"])
         printmd("**Last response regenerated.**")
+
+    def __fill_content(self, index: int, content: str) -> None:
+        """Fill content"""
+        self.messages[index]["content"] = content
+        self.modified = True
 
     def __edit_message(self, index: int, prompt=True) -> None:
         """Edit message"""
@@ -269,8 +274,7 @@ class Conversation:
             show_message(msg)
         new_content = user_input("\nEnter new content, leave blank to skip: ")
         if new_content:
-            self.messages[index]["content"] = new_content
-            self.modified = True
+            self.__fill_content(index, new_content)
             printmd("**Message edited.**")
         else:
             printmd("**Message not edited.**")
