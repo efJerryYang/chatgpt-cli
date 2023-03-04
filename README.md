@@ -21,7 +21,7 @@ These commands are designed to enable you to use this tool much like you would u
 
 Below is a simple demonstration of using this tool:
 
-<!-- <insert gif> -->
+![demo](demo/ezgif.com-optimize.gif)
 
 ## Usage
 
