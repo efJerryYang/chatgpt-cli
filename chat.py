@@ -121,7 +121,12 @@ def save_current_conversation(
         return
     # Save conversation
     if filepath:
-        save_data(messages, os.path.basename(filepath))
+        filename = os.path.basename(filepath)
+        check = input(f"Save to [{filename}]? [y/n]: ")
+        if check.lower() == "n":
+            printmd("**Conversation not saved.**")
+            return
+        save_data(messages, filename)
     else:
         t = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
         tmp = f"conversation_{t}.json"
@@ -227,7 +232,7 @@ def execute_command(
         start_new_converstation(messages, default_prompt)
         display_history(messages)
     elif user_input == "!regen":
-        regenerate_last_response()
+        regenerate_last_response(messages)
     elif user_input == "!edit":
         edit_messages(messages)
     elif user_input == "!drop":
