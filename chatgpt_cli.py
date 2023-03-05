@@ -9,7 +9,7 @@ def get_script_dir() -> str:
 
 
 def get_config_dir() -> str:
-    return get_script_dir()
+    return os.path.join(get_script_dir(), "config")
 
 
 def get_config_path() -> str:
