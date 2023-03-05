@@ -56,7 +56,7 @@ def setup_runtime_env() -> Dict:
     return config
 
 
-if __name__ == "__main__":
+def main():
     config = setup_runtime_env()
     default_prompt = config["openai"]["default_prompt"]
     show_welcome_panel()
@@ -78,3 +78,7 @@ if __name__ == "__main__":
             continue
         else:
             conv.save(True)
+
+
+if __name__ == "__main__":
+    main()
