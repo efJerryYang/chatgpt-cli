@@ -1,13 +1,19 @@
-from rich.panel import Panel
-from rich.markdown import Markdown
-from rich.console import Console
 import readline
-from typing import Dict, List
-from rich import print
+from typing import Dict
+
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.panel import Panel
+
+console = Console()
+
+
+def print(*args, **kwargs) -> None:
+    console.print(*args, **kwargs)
 
 
 def printpnl(
-    msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
+        msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
 ) -> None:
     print()
     if markdown:
@@ -15,9 +21,6 @@ def printpnl(
     else:
         print(Panel(msg, title=title, border_style=border_style, width=width))
     print()
-
-
-console = Console()
 
 
 def printmd(msg: str, newline=True) -> None:
@@ -51,7 +54,6 @@ def system_output(msg: str) -> None:
     printmd("**System:** {}".format(msg))
 
 
-
 def user_input(prompt="\nUser: ") -> str:
     """
     Get user input with support for multiple lines without submitting the message.
@@ -69,7 +71,6 @@ def user_input(prompt="\nUser: ") -> str:
     msg = "\n".join(lines)
     printmd("**[Input Submitted]**")
     return msg
-
 
 
 def show_welcome_panel():
@@ -100,6 +101,7 @@ For more detailed documentation, please visit <link_to_wiki> or <link_to_docs>
 Enjoy your chat!
 """
     printpnl(welcome_msg, title="Welcome")
+
 
 def show_setup_error_panel():
     first_launch_msg = """

@@ -1,13 +1,7 @@
-import os
-from typing import Dict, List
-
-import openai
 import yaml
-from rich import print
 
-from utils.conversation import *
-from utils.display import *
 from utils.command import *
+from utils.display import print
 
 
 def get_script_dir() -> str:
@@ -44,12 +38,12 @@ def setup_runtime_env() -> Dict:
         # set up openai API key and system prompt
         openai.api_key = config["openai"]["api_key"]
         # set proxy if defined
+        default_prompt = config.get("openai", {}).get("default_prompt", None)
+        if default_prompt is None:
+            raise (Exception("Error: the `default_prompt` is empty in `config.yaml`"))
         if "proxy" in config:
             os.environ["http_proxy"] = config["proxy"].get("http_proxy", "")
             os.environ["https_proxy"] = config["proxy"].get("https_proxy", "")
-            default_prompt = config.get("openai", {}).get("default_prompt", None)
-        if default_prompt is None:
-            raise (Exception("Error: the `default_prompt` is empty in `config.yaml`"))
     except Exception:
         print("Error in configuration file:", get_config_path())
         exit(1)

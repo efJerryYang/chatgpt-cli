@@ -1,8 +1,8 @@
-from datetime import datetime
 import json
-from typing import Dict, List
 import os
-from rich import print
+from typing import Dict, List
+
+from utils.display import print
 
 
 def get_main_dir() -> str:
@@ -45,7 +45,7 @@ def load_data(messages: List[Dict[str, str]]) -> str:
     # prompt user to select a file to load
     print("Available data files:\n")
     for i, f in enumerate(files):
-        print(f"{i+1}. {f}")
+        print(f"{i + 1}. {f}")
     for a in range(3):
         selected_file = input(
             f"\nEnter file number to load (1-{len(files)}), or Enter to start a fresh one: "

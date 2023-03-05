@@ -1,8 +1,9 @@
 import os
 from datetime import datetime
+from typing import List
 
 import openai
-from typing import Dict, List
+
 from utils.data import load_data, save_data
 from utils.display import *
 
@@ -26,9 +27,7 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
             return ""
     except openai.error.InvalidRequestError as invalid_err:
         print(invalid_err)
-        printpnl(
-            "**[Invalid Request]**\nPlease revise your messages according to the error message above."
-        )
+        printpnl("**[Invalid Request]**\nPlease revise your messages according to the error message above.")
         return ""
 
 
@@ -61,8 +60,8 @@ class Conversation:
 
     def save(self, enable_prompt: bool) -> None:
         if enable_prompt and self.modified:
-            user_input = input("Save conversation? [y/n]: ").strip()
-            if user_input.lower() != "y":
+            user_msg = input("Save conversation? [y/n]: ").strip()
+            if user_msg.lower() != "y":
                 printmd("**Conversation not saved.**")
                 return
 
@@ -83,8 +82,8 @@ class Conversation:
 
     def load(self) -> None:
         if self.modified:
-            user_input = input("Save conversation? [y/n]: ").strip()
-            if user_input.lower() == "y":
+            user_msg = input("Save conversation? [y/n]: ").strip()
+            if user_msg.lower() == "y":
                 self.save(enable_prompt=False)
         self.messages = list(self.default_prompt)
         self.filepath = load_data(self.messages)
@@ -93,8 +92,8 @@ class Conversation:
 
     def reset(self) -> None:
         if self.modified:
-            user_input = input("Save conversation? [y/n]: ").strip()
-            if user_input.lower() == "y":
+            user_msg = input("Save conversation? [y/n]: ").strip()
+            if user_msg.lower() == "y":
                 self.save(enable_prompt=False)
         self.messages = list(self.default_prompt)
         self.modified = False
@@ -213,8 +212,8 @@ class Conversation:
         for i, msg in enumerate(self.messages):
             printpnl(f"### Message {i}", "Dropping Messages", "yellow")
             show_message(msg)
-            user_input = input("Select this message to drop? [y/n]: ").strip()
-            if user_input.lower() == "y":
+            user_msg = input("Select this message to drop? [y/n]: ").strip()
+            if user_msg.lower() == "y":
                 index.append(i)
                 printmd("**Message selected.**")
             else:
@@ -223,8 +222,8 @@ class Conversation:
             for i in reversed(index):
                 printpnl(f"### Message {i}", "Dropping Messages", "red")
                 show_message(self.messages[i])
-                user_input = input("Drop this message? [y/n]: ").strip()
-                if user_input.lower() == "y":
+                user_msg = input("Drop this message? [y/n]: ").strip()
+                if user_msg.lower() == "y":
                     self.messages.pop(i)
                     self.modified = True
                     printmd("**Message dropped.**")
