@@ -235,6 +235,9 @@ class Conversation:
         last_message = self.messages[-1]
         if last_message["role"] == "user":
             assistant_message = generate_response(self.messages)
+            if not assistant_message:
+                printmd("**Last response is empty. Resend failed.**")
+                return
             self.add_assistant_message(assistant_message)
             printmd("**Last prompt resent.**")
             assistant_output(assistant_message)
@@ -257,6 +260,9 @@ class Conversation:
             )
             return
         content = generate_response(self.messages[:-1])
+        if not content:
+            printmd("**Last response is empty. Content not regenerated.**")
+            return
         self.__fill_content(- 1, content)
         assistant_output(self.messages[-1]["content"])
         printmd("**Last response regenerated.**")
