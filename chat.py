@@ -199,6 +199,7 @@ class Conversation:
                 filename = input(f"Enter filename to save to [{tmp}]: ").strip()
                 if not filename:
                     filename = tmp
+                self.filepath = os.path.join(get_data_dir(), filename)
             printmd(f"**Conversation save to [{filename}].**")
             save_data(self.messages, filename)
             self.modified = False
