@@ -2,7 +2,9 @@
 
 ## Introduction
 
-ChatGPT CLI is a command-line interface tool that connects to the ChatGPT language model using OpenAI's official API key. With markdown support, it allows you to structure your inputs in a readable and well-organized format for future reference. Additionally, the tool saves conversations in JSON format and loads them when it starts.
+ChatGPT CLI is a command-line interface tool that connects to the ChatGPT language model using OpenAI's official API
+key. With markdown support, it allows you to structure your inputs in a readable and well-organized format for future
+reference. Additionally, the tool saves conversations in JSON format and loads them when it starts.
 
 Here is a simple demonstration of how to use it:
 
@@ -10,7 +12,8 @@ Here is a simple demonstration of how to use it:
 
 ## Commands
 
-We've provided serveral commands to help you use this tool more conveniently. You don't need to remember all of them to start, as you can type `!help` whenever you want to have a look:
+We've provided server commands to help you use this tool more conveniently. You don't need to remember all of them to
+start, as you can type `!help` whenever you want to have a look:
 
 - `!help`: shows the help message
 - `!show`: displays the current conversation messages
@@ -23,11 +26,13 @@ We've provided serveral commands to help you use this tool more conveniently. Yo
 - `!drop`: selects messages for deletion
 - `!exit` or `!quit`: exits the program
 
-These commands are designed to enable you to use this tool much like you would use the official web client. If you find that you need additinal command support, feel free to open an issue.
+These commands are designed to enable you to use this tool much like you would use the official web client. If you find
+that you need additional command support, feel free to open an issue.
 
 ## Prequisites
 
-To use ChatGPT CLI, you'll need to have Python 3.x installed on your machine. You can type `python -V` in your command line to see your python version, and the output of this command would look like this:
+To use ChatGPT CLI, you'll need to have Python 3.x installed on your machine. You can type `python -V` in your command
+line to see your python version, and the output of this command would look like this:
 
 ```sh
 Python 3.11.2
@@ -35,7 +40,8 @@ Python 3.11.2
 
 You'll also need an OpenAI API key (which you can [get here](https://platform.openai.com/account/api-keys)).
 
-The Python packages we used include `openai`, `pyyaml` and `rich`, which can be installed with `pip install -r requirements.txt`.
+The Python packages we used include `openai`, `pyyaml` and `rich`, which can be installed
+with `pip install -r requirements.txt`.
 
 ## Installation
 
@@ -51,9 +57,13 @@ Then, navigate to the cloned repository and install the required dependencies:
 pip install -r requirements.txt
 ```
 
-To use this tool, you will need to have a `config.yaml` in the directory as your script `chat.py`. You can copy the content of `config.yaml.example` and repalce the api key placeholder with your own OpenAi API key.
+To use this tool, you will need to have a `config.yaml` in the directory as your script `chat.py`. You can copy the
+content of `config.yaml.example` and repalce the api key placeholder with your own OpenAi API key.
 
-If you're running the tool over a proxy, replace the `http://127.0.0.1:7890` with the address and port of your proxy server in the `http_proxy` and `https_proxy` fields respectively. If you're not using a proxy or you're not sure what to set these fields to, you can ignore the `proxy` field or delete it from your `config.yaml` file. Here is an example of a `config.yaml` file with a proxy:
+If you're running the tool over a proxy, replace the `http://127.0.0.1:7890` with the address and port of your proxy
+server in the `http_proxy` and `https_proxy` fields respectively. If you're not using a proxy or you're not sure what to
+set these fields to, you can ignore the `proxy` field or delete it from your `config.yaml` file. Here is an example of
+a `config.yaml` file with a proxy:
 
 ```yaml
 # config.yaml.example
@@ -67,7 +77,8 @@ proxy:
   https_proxy: http://yourproxyserver.com:8080
 ```
 
-Remember to replace `http://yourproxyserver.com:8080` with the address and port of your proxy server. If you don't want to use a proxy, you can delete the `proxy` field from your `config.yaml` file, like this:
+Remember to replace `http://yourproxyserver.com:8080` with the address and port of your proxy server. If you don't want
+to use a proxy, you can delete the `proxy` field from your `config.yaml` file, like this:
 
 ```yaml
 # config.yaml.example
@@ -96,7 +107,9 @@ You should have the following directory structure:
 `-- requirements.txt
 ```
 
-`chat.py` is the script to run, and `config.yaml` is the configuration file that sets up the runtime environment. The `data` directory should be created automatically the first time you run the script after you have installed the required dependencies.
+`chat.py` is the script to run, and `config.yaml` is the configuration file that sets up the runtime environment.
+The `data` directory should be created automatically the first time you run the script after you have installed the
+required dependencies.
 
 To start using this tool, run the following command:
 
@@ -104,9 +117,13 @@ To start using this tool, run the following command:
 python chat.py
 ```
 
-You can exit the tool by typing `!quit` command during your conversation, and the script will prompt you to choose storing the conversation or not once you make changes to current conversation. The `quit` command in previous versions is also supported.
+You can exit the tool by typing `!quit` command during your conversation, and the script will prompt you to choose
+storing the conversation or not once you make changes to current conversation. The `quit` command in previous versions
+is also supported.
 
-To send a prompt to ChatGPT, hit the `[Enter]` key twice after your message. If you press `[Enter]` only once, it will create a new line, but if the message is blank, it will also be submitted to ChatGPT. Note that if you submit an empty message, only the stripped empty string will be sent directly to ChatGPT without any prompts.
+To send a prompt to ChatGPT, hit the `[Enter]` key twice after your message. If you press `[Enter]` only once, it will
+create a new line, but if the message is blank, it will also be submitted to ChatGPT. Note that if you submit an empty
+message, only the stripped empty string will be sent directly to ChatGPT without any prompts.
 
 ## Todos
 
@@ -121,6 +138,7 @@ If you'd like to contribute to ChatGPT CLI, please feel free to submit a pull re
 ## References
 
 - The idea of using the `rich.panel` package comes from [mbroton's chatgpt-api](https://github.com/mbroton/chatgpt-api).
+
 <!-- - The !summarize command for generating a summary of the current conversation to guide the user in continuing the conversation is inspired by 沙漏/u202e. -->
 
 ## License
