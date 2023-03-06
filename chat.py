@@ -221,6 +221,7 @@ class Conversation:
             user_input = input("Save conversation? [y/n]: ").strip()
             if user_input.lower() == "y":
                 self.save(enable_prompt=False)
+        self.filepath = ""
         self.messages = list(self.default_prompt)
         self.modified = False
         printpnl("### Conversation reset.", "ChatGPT CLI", "green", 120)
