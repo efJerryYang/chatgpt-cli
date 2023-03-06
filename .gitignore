@@ -1,4 +1,6 @@
 .python-version
 data/*
+bin/*
 config.yml
 config.yaml
+sync_bin.*

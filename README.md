@@ -108,11 +108,80 @@ You can exit the tool by typing `!quit` command during your conversation, and th
 
 To send a prompt to ChatGPT, hit the `[Enter]` key twice after your message. If you press `[Enter]` only once, it will create a new line, but if the message is blank, it will also be submitted to ChatGPT. Note that if you submit an empty message, only the stripped empty string will be sent directly to ChatGPT without any prompts.
 
+## Using this tool as a binary (Optional)
+
+It would be more convenient if the script could be run from any directory, but unfortunately I'm not familiar with packaging Python projects for PyPI.
+
+Alternatively, the following commands can help run it as a binary, you can save the command you use as `sync_bin.sh` or `sync_bin.bat` so that it would not be tracked by `git` (see `.gitignore`), and which name you use depends on the OS type.
+
+### Unix-like OS users
+
+1. First, create a directory named `bin` if it does not exist in the root directory of the project:
+
+   ```sh
+   mkdir bin
+   ```
+
+2. Then, copy the `chat.py` file to the `bin` directory and rename it to `chatgpt-cli`:
+
+   ```sh
+   cp -a chat.py bin/chatgpt-cli
+   ```
+
+3. Modify the shebang line of the `chatgpt-cli` file to use the path of your Python interpreter that installed the `requirements.txt`.
+
+   ```sh
+   sed -i '1i\#!/path/to/your/requirements/installed/python' bin/chatgpt-cli
+   ```
+
+   > _Note: Replace `/path/to/your/requirements/installed/python` with the actual path to your Python interpreter that has the required packages installed. For example, in my case it would be: `/home/jerry/.pyenv/versions/3.11.2/envs/openai-utils/bin/python`_
+
+4. Finally, set the execute permission for the `chatgpt-cli` file if it does not have currently:
+
+   ```sh
+   sudo chmod a+x bin/chatgpt-cli
+   ```
+
+5. Add the following line to your shell run command file, such as `.bashrc`, to include the `bin` directory to your `$PATH` environment variable:
+
+   ```sh
+   # chatgpt-cli here is the project directory name
+   export PATH=${PATH}:/absolute/path/to/your/chatgpt-cli/bin
+   ```
+
+6. Type `source ~/.bashrc` (or a similar command) to start using this tool from any directory.
+
+Now, you can run the `chatgpt-cli` command from any terminal or command prompt window, regardless of your current working directory.
+
+### Windows Users
+
+1. Create a directory named bin in the root directory of the project.
+2. Copy the `chat.py` file to the bin directory and rename it to `chatgpt-cli.py`.
+3. Open the environment variable settings window by searching for "Environment Variables" in the Windows search bar.
+4. Click on "Edit the system environment variables" and then click on the "Environment Variables" button.
+5. In the "User variables" or "System variables" section, find the PATH variable, and click on the "Edit" button.
+6. In the "Edit environment variable" window, click on the "New" button and add the absolute path to the bin directory (e.g., `C:\Projects\chatgpt-cli\bin`). Click on "OK" to close all the windows.
+7. In the bin directory, create a new file named `chatgpt-cli.bat` and paste the following contents:
+
+   ```bat
+   @echo off
+   python "%~dp0\chatgpt-cli.py" %*
+   ```
+
+8. Save the file and close it.
+9. Open a new command prompt or PowerShell window and run the `chatgpt-cli` command.
+
+Now, you can run the `chatgpt-cli` command from any terminal or command prompt window, regardless of your current working directory.
+
 ## Todos
 
 - [ ] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
-- [ ] Count tokens in conversation and display the total number
-- [ ] Generate a summary of the conversation to reduce token usage
+- [ ] Fix inconsistent operation for `!edit` and `!drop`
+- [ ] `!token`: Count tokens in conversation and display the total number
+- [ ] `!sum`: Generate a summary of the conversation to reduce token usage
+- [ ] `!tmpl`: Choose system prompt templates
+- [ ] `!conv`: Show conversation list, Delete and Rename saved conversations
+- [ ] `!sys <command>`: Enable you to run system command
 
 ## Contributing
 
