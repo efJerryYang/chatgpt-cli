@@ -495,8 +495,11 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         return assistant_message
     except openai.error.APIConnectionError as api_conn_err:
         print(api_conn_err)
+        printpnl(
+            "**[API Connection Error]**\n. Please check your internet connection and try again."
+        )
         user_message = input(
-            "Oops, something went wrong. Do you want to retry? (y/n): "
+            "Do you want to retry now? (y/n): "
         )
         if user_message.strip().lower() == "y":
             return generate_response(messages)
@@ -513,17 +516,29 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         printpnl(
             "**[API Error]**\nThis might be caused by API outage. Please try again later."
         )
-        return ""
+        user_message = input(
+            "Do you want to retry now? (y/n): "
+        )
+        if user_message.strip().lower() == "y":
+            return generate_response(messages)
+        else:
+            return ""
     except openai.error.RateLimitError as rate_err:
         print(rate_err)
         printpnl(
             "**[Rate Limit Error]**\nThis is caused by API outage. Please try again later."
         )
-        return ""
+        user_message = input(
+            "Do you want to retry now? (y/n): "
+        )
+        if user_message.strip().lower() == "y":
+            return generate_response(messages)
+        else:
+            return ""
     except Exception as e:
         print(e)
         printpnl(
-            "**[Unknown Error]**\nThis is an unknown error, please contact project maintainer to handle it properly."
+            "**[Unknown Error]**\nThis is an unknown error, please contact maintainer with error message to help handle it properly."
         )
         return ""
 
