@@ -493,8 +493,8 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         )
         assistant_message = response["choices"][0]["message"]["content"].strip()
         return assistant_message
-    except openai.error.APIConnectionError as api_err:
-        print(api_err)
+    except openai.error.APIConnectionError as api_conn_err:
+        print(api_conn_err)
         user_message = input(
             "Oops, something went wrong. Do you want to retry? (y/n): "
         )
@@ -506,6 +506,12 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         print(invalid_err)
         printpnl(
             "**[Invalid Request]**\nPlease revise your messages according to the error message above."
+        )
+        return ""
+    except openai.error.APIError as api_err:
+        print(api_err)
+        printpnl(
+            "**[API Error]**\nPlease revise your messages according to the error message above."
         )
         return ""
 
