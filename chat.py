@@ -505,13 +505,13 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
     except openai.error.InvalidRequestError as invalid_err:
         print(invalid_err)
         printpnl(
-            "**[Invalid Request]**\nPlease revise your messages according to the error message above."
+            "**[Invalid Request Error]**\nPlease revise your messages according to the error message above."
         )
         return ""
     except openai.error.APIError as api_err:
         print(api_err)
         printpnl(
-            "**[API Error]**\nPlease revise your messages according to the error message above."
+            "**[API Error]**\nThis might be caused by API outage. Please try again later."
         )
         return ""
 
