@@ -514,6 +514,18 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
             "**[API Error]**\nThis might be caused by API outage. Please try again later."
         )
         return ""
+    except openai.error.RateLimitError as rate_err:
+        print(rate_err)
+        printpnl(
+            "**[Rate Limit Error]**\nThis is caused by API outage. Please try again later."
+        )
+        return ""
+    except Exception as e:
+        print(e)
+        printpnl(
+            "**[Unknown Error]**\nThis is an unknown error, please contact project maintainer to handle it properly."
+        )
+        return ""
 
 
 if __name__ == "__main__":
