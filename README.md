@@ -1,5 +1,7 @@
 # ChatGPT CLI
 
+[中文](README_zh.md)
+
 ## Introduction
 
 ChatGPT CLI is a command-line interface tool that connects to the ChatGPT language model using OpenAI's official API key. It features markdown support, allowing you to structure your inputs in a readable and well-organized format for easier reference. The tool also saves conversations in `JSON` format, you can load them with `!load` command. For more command usage, you can type `!help` or see more in the [Commands](#commands) section.
@@ -58,7 +60,7 @@ After installation, you can start the ChatGPT CLI tool by typing `chatgpt-cli` i
 chatgpt-cli
 ```
 
-If you are running the tool for the first time, you will be prompted to configure your `config.yaml` file, including importing the `data` directory from your previous script version. If you do not have a configuration file in the path `${HOME}/.config/chatgpt-cli/config.yaml`, you can create a new one with the interactive setup procedure provided by the tool. You will need to input your OpenAI API key and proxy settings (if any). You can also get an OpenAI API key [here](https://platform.openai.com/account/api-keys) if you do not have one.
+If you are running the tool for the first time, you will be prompted to configure your `config.yaml` file, and you can also import the `data` directory from your previous script version. If you do not have a configuration file in the path `${HOME}/.config/chatgpt-cli/config.yaml`, you can create a new one with the interactive setup procedure provided by the tool, or you can import the one you have already used in your previous version. If choose to create a new one, You will need to input your OpenAI API key and proxy settings (if any). You can also get an OpenAI API key [here](https://platform.openai.com/account/api-keys) if you do not have one.
 
 After configuring your settings, a welcome panel with help information will be displayed, and you can start chatting with ChatGPT using a variety of commands.
 
