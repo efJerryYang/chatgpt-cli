@@ -18,10 +18,10 @@ def get_script_dir() -> str:
     return os.path.dirname(os.path.abspath(__file__))
 
 
-def get_data_dir() -> str:
+def get_data_dir(create=True) -> str:
     """Data directory: `${HOME}/.config/chatgpt-cli/data`"""
     data_dir = os.path.join(get_config_dir(), "data")
-    if not os.path.exists(data_dir):
+    if create and not os.path.exists(data_dir):
         os.mkdir(data_dir)
     return data_dir
 
@@ -98,6 +98,30 @@ def create_config_yaml():
     save_config_yaml(config)
 
 
+def import_data_directory():
+    data_dir = get_data_dir()  # will create the data directory
+    for i in range(3):
+        try:
+            old_data_dir = input("Enter absolute path to the data directory containing *.json files (e.g., /absolute/path/to/data/): ").strip()
+            for file in os.listdir(old_data_dir):
+                if file.endswith(".json"):
+                    with open(os.path.join(old_data_dir, file), "r") as f:
+                        data = json.load(f)
+                    with open(os.path.join(data_dir, file), "w") as f:
+                        json.dump(data, f)
+            break
+        except FileNotFoundError:
+            printmd("**[File Not Found Error]**: Please check the path and try again")
+        except Exception as e:
+            printmd(f"**[Unknown Error]**: {e}")
+    printmd(f"**[Success]**: Data files imported to `{data_dir}`")
+
+
+def create_data_directory():
+    data_dir = get_data_dir()  # will create the data directory
+    printmd(f"**[Success]**: Data directory created at `{data_dir}`")
+
+
 def load_config() -> Dict:
     # check if config file exists
     first_launch_msg = f"""
@@ -131,6 +155,15 @@ If you don't have an OpenAI API key, you can get one at https://platform.openai.
         except yaml.YAMLError:
             print("Error in configuration file:", config_path)
             exit(1)
+    if not os.path.exists(get_data_dir(create=False)):
+        choose = input(
+            "Do you want to import previous data files [*.json]? [y/n]: "
+        ).strip()
+        if choose.lower() == "y":
+            import_data_directory()
+        else:
+            create_data_directory()
+
     return config
 
 
