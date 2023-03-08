@@ -27,7 +27,7 @@ These commands are designed to enable you to use this tool much like you would u
 
 ## Prequisites
 
-To use ChatGPT CLI, you'll need to have Python 3.x installed on your machine. You can type `python -V` in your command line to see your python version, and the output of this command would look like this:
+To use ChatGPT CLI, you'll need to have `Python>=3.8` installed on your machine. You can type `python -V` in your command line to see your python version, and the output of this command would look like this:
 
 ```sh
 Python 3.11.2
