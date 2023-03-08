@@ -71,3 +71,6 @@ bin/*
 config.yml
 config.yaml
 sync_bin.*
+script/data/*
+script/config.yaml
+script/config.yml
