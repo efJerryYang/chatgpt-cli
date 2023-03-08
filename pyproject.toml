@@ -1,0 +1,35 @@
+[project]
+name = "chatgpt-cli"
+version = "0.1.0"
+description = "A markdown-supported command-line interface tool that connects to ChatGPT using OpenAI's API key."
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+keywords = [
+  "chatbot",
+  "chatgpt",
+  "chatgpt-cli",
+  "openai",
+  "markdown",
+  "cli",
+  "command-line",
+]
+authors = [{ name = "Jerry Yang", email = "efjerryyang@outlook.com" }]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+scripts = { chatgpt-cli = "chatgpt_cli.chat:main" }
+dependencies = ["openai >= 0.27.0", "pyyaml >= 6.0", "rich >= 13.3.1"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.urls]
+"Homepage" = "https://github.com/efJerryYang/chatgpt-cli"
+"Bug Tracker" = "https://github.com/efJerryYang/chatgpt-cli/issues"
+"Repository" = "https://github.com/efJerryYang/chatgpt-cli.git"
+
+
