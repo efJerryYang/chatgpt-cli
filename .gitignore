@@ -1,3 +1,70 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+pythonenv*
+
+# Local development settings
+.idea/
+.vscode/
+
+# Ignore any local configuration files
+config.local.*/
+
+# Ignore backup files
+*~
+
+# Ignore any archives or files extracted from them
+*.gz
+*.bz2
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+
+# Ignore pytest cache directory
+__pycache__/
+
+# Ignore Django generated files
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+
+# Ignore Sphinx documentation
+docs/_build/
+
+# Ignore dist directory
+dist/
+
+
 .python-version
 data/*
 bin/*
