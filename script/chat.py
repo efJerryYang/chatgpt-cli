@@ -85,7 +85,7 @@ def setup_runtime_env() -> Dict:
         if "proxy" in config:
             os.environ["http_proxy"] = config["proxy"].get("http_proxy", "")
             os.environ["https_proxy"] = config["proxy"].get("https_proxy", "")
-            default_prompt = config.get("openai", {}).get("default_prompt", None)
+        default_prompt = config.get("openai", {}).get("default_prompt", None)
         if default_prompt is None:
             raise (Exception("Error: the `default_prompt` is empty in `config.yaml`"))
     except Exception:
