@@ -8,7 +8,6 @@ from rich.panel import Panel
 
 from chatgpt_cli import __version__
 
-
 console = Console()
 
 
@@ -57,7 +56,30 @@ def assistant_output(msg: str) -> None:
 def system_output(msg: str) -> None:
     printmd("**System:** {}".format(msg))
 
-
+def input_error_handler(is_modified:bool, e: Exception) -> None:
+    initial_error = e
+    for i in range(3):
+        try:
+            if isinstance(e, EOFError):
+                printmd("**[EOF Error]**", newline=False)
+                printmd("**Exiting...**", newline=False)
+                exit(0)
+            elif isinstance(e, KeyboardInterrupt):
+                printmd("**[Keyboard Interrupted Error]**", newline=False)
+                printpnl("### You have interrupted the program with `Ctrl+C`. This is usually caused by pressing `Ctrl+C`.", "Exit Confirmation", "red")
+                confirm_prompt = f"Are you sure you want to exit{' without saving' if is_modified else ''}? [y/N]: "
+                if input(confirm_prompt).lower() == "y":
+                    printmd("**Exiting...**", newline=False)
+                    exit(0)
+                else:
+                    printmd("**[Resuming]**")
+                    return
+            else:
+                printmd("**[Unknown Error]** This a an unhandled error. Please report this issue on GitHub: https://github.com/efJerryYang/chatgpt-cli/issues")
+                raise e
+        except Exception as e:
+            continue
+    
 def user_input(prompt="\nUser: ") -> str:
     """
     Get user input with support for multiple lines without submitting the message.
@@ -106,7 +128,8 @@ Enjoy your chat!
 """
     printpnl(welcome_msg, title="Welcome")
 
-def show_setup_error_panel(config_path:str):
+
+def show_setup_error_panel(config_path: str):
     first_launch_msg = f"""
 Welcome to ChatGPT CLI v{__version__}!
 

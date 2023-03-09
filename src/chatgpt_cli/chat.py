@@ -41,21 +41,28 @@ def main():
 
     conv = Conversation(default_prompt)
     conv.show_history()
-
     while True:
-        user_message = user_input().strip()
-        if is_command(user_message):
-            execute_command(user_message, conv)
+        try:
+            user_message = user_input().strip()
+            if is_command(user_message):
+                execute_command(user_message, conv)
+                continue
+            else:
+                conv.add_user_message(user_message)
+            assistant_message = generate_response(conv.messages)
+            if assistant_message:
+                assistant_output(assistant_message)
+                conv.add_assistant_message(assistant_message)
+                continue
+            else:
+                conv.save(True)
+        except KeyboardInterrupt as e:
+            input_error_handler(conv.modified, e)
             continue
-        else:
-            conv.add_user_message(user_message)
-        assistant_message = generate_response(conv.messages)
-        if assistant_message:
-            assistant_output(assistant_message)
-            conv.add_assistant_message(assistant_message)
+        except EOFError as e:
+            input_error_handler(conv.modified, e)
             continue
-        else:
-            conv.save(True)
+
 
 
 if __name__ == "__main__":
