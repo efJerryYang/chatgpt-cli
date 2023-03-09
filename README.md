@@ -72,63 +72,21 @@ If you are running the tool for the first time, you will be prompted to configur
 
 After configuring your settings, a welcome panel with help information will be displayed, and you can start chatting with ChatGPT using a variety of commands.
 
-<!--
-### Install from Release
+A template of `config.yaml` is shown below:
 
-You can install the packages from release by:
-
-```sh
-pip install chatgpt-cli-0.1.0.tar.gz
+```yaml
+# ChatGPT CLI Configuration File
+openai:
+  api_key: <YOUR_API_KEY>
+  default_prompt:
+    - role: system
+      content: You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.
+proxy:
+  http_proxy: http://127.0.0.1:7890
+  https_proxy: http://127.0.0.1:7890
 ```
 
-Or:
-
-```sh
-pip install chatgpt_cli-1.0.0-py3-none-any.whl
-```
-
-All the dependencies needed for running this tool will be installed automatically.
-
-### Build and Install
-
-You can also build this project and get the binary to install by running the following:
-First, you can clone the project by running the following:
-
-```sh
-git clone https://github.com/efJerryYang/chatgpt-cli.git
-```
-
-Then, navigate to the cloned repository and install the required dependencies:
-
-```sh
-pip install -r requirements.txt
-```
-
-Next, build the project into package, the package files `*.tar.gz` or `*.whl` will be exported to `dist/` directory.
-
-```sh
-python -m build
-```
-
-Then you can following the instructions above to install the package.
-
-### Run the Script Version
-
-If you are still interested in running it using script, you can navigate to the `script/` directory, and do whatever the same as original version. Currently, you can refer to the [Old README](docs/archive/README.md) for its usage.
-However, this is not recommended and the script there will not be maintained actively. Changes like bugfixes or new features will not be applied to the script simultaneously.
-Moreover, it is rather easy to convert from old script version to current version by importing old `config.yaml` and data directory using the updated `chatgpt-cli` tool.
-
-## Running the Tool
-
-Once you have the package installed through `pip` command, you will be able to access this tool by typing `chatgpt-cli` in your terminal.
-
-```sh
-chatgpt-cli
-```
-
-Then, you will be prompted to setup the `config.yaml` if you do not currently have one in the path `${HOME}/.config/chatgpt-cli/config.yaml`. You can also import the data directory from your previous script version, and the new data directory will be at `${HOME}/.config/chatgpt-cli/data/`.
-If you have not installed this tool on your machine, you can create a new `config.yaml` with the interactive setup procedure provided by the tool. You will be prompted to input your OpenAI's API key, and proxy settings (if you have one). If you don't currently have an OpenAI's API key, you can [get one here](https://platform.openai.com/account/api-keys).
-Once you have setup all the configuration, you will be displayed with a welcome panel with help information, and you can then start chatting to ChatGPT! -->
+You can remove the `proxy` section or leave its value empty if you do not need to use a proxy.
 
 ## Commands
 

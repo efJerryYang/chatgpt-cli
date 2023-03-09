@@ -16,7 +16,7 @@ ChatGPT CLI 是一个使用 OpenAI 官方 API 和 ChatGPT 交互的命令行工�
 
 <!-- For more detailed information, please check out the `<link_to_docs>`. -->
 
-## 前置准备
+## 准备
 
 运行 ChatGPT CLI 要求 Python 3.8 及以上版本，因为使用了 `importlib.metadata` 特性，但是这一特性在 3.8 及以后的版本才加入。可以通过在控制台运行 `python -V` 来查看当前环境的 Python 版本。
 
@@ -75,6 +75,22 @@ chatgpt-cli
 如果你是第一次运行，将提示你配置 `config.yaml` 文件，以及选择是否导入之前版本 `data` 目录下的对话记录。 如果程序在 `${HOME}/.config/chatgpt-cli/config.yaml` 找不到配置文件，你可以选择根据交互提示新建一个，或者从原来 `config.yaml` 的路径导入。如果你选择新建一个，你需要根据提示输入你的 OpenAI API key，并且设置代理（如果你使用代理的话）。你可以从[这里](https://platform.openai.com/account/api-keys) 获取一个 OpenAI API key。
 
 在配置完成之后，你会看到一个欢迎界面，目前只支持来英文显示，你可以正常使用中文和 ChatGPT 交流。欢迎界面也会呈现命令的帮助信息，此时你就已经可以开始和 ChatGPT 对话了。
+
+一个 `config.yaml` 的模板如下：
+
+```yaml
+# ChatGPT CLI Configuration File
+openai:
+  api_key: <YOUR_API_KEY>
+  default_prompt:
+    - role: system
+      content: You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.
+proxy:
+  http_proxy: http://127.0.0.1:7890
+  https_proxy: http://127.0.0.1:7890
+```
+
+如果你不需要使用代理，你可以删除 `proxy` 部分或者将其值留空。
 
 ## 命令
 
