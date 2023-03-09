@@ -1,5 +1,7 @@
 # ChatGPT CLI
 
+[![PyPI](https://img.shields.io/pypi/v/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![PyPI - License](https://img.shields.io/pypi/l/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![Stars](https://img.shields.io/github/stars/efJerryYang/chatgpt-cli)](https://github.com/efJerryYang/chatgpt-cli/stargazers)
+
 [English](README.md)
 
 ## 简介
@@ -28,7 +30,9 @@ ChatGPT CLI 是一个使用 OpenAI 官方 API 和 ChatGPT 交互的命令行工�
 
 ## 安装
 
-可以从 [latest release](https://github.com/efJerryYang/chatgpt-cli/releases) 下载最新版本的包，运行以下两个命令之一进行安装。你需要注意的是，请将 `<version>` 替换为你下载的版本号，如 `0.1.0`，你也可以选择执行 `pip install chatgpt-cli-md` 从 PyPI 安装。
+可以从 [latest release](https://github.com/efJerryYang/chatgpt-cli/releases) 下载最新版本的包，运行以下两个命令之一进行安装。你需要注意的是，请将 `<version>` 替换为你下载的版本号，如 `0.1.0`。
+
+你也可以选择执行 `pip install chatgpt-cli-md` 从 PyPI 安装。
 
 ```sh
 pip install chatgpt-cli-md-<version>.tar.gz

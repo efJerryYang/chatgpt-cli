@@ -1,5 +1,7 @@
 # ChatGPT CLI
 
+[![PyPI](https://img.shields.io/pypi/v/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![PyPI - License](https://img.shields.io/pypi/l/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![Stars](https://img.shields.io/github/stars/efJerryYang/chatgpt-cli)](https://github.com/efJerryYang/chatgpt-cli/stargazers)
+
 [中文](README_zh.md)
 
 ## Introduction
@@ -24,7 +26,9 @@ The required Yython packages can be installed with `pip install -r requirements.
 
 ## Installation
 
-You can install ChatGPT CLI by downloading the package from the [latest release](https://github.com/efJerryYang/chatgpt-cli/releases) and running either of the following commands. Note that you will need to replace `<version>` with the version number of the package you downloaded (e.g. `0.1.0`). You can also install the package from PyPI by running `pip install chatgpt-cli-md`.
+You can install ChatGPT CLI by downloading the package from the [latest release](https://github.com/efJerryYang/chatgpt-cli/releases) and running either of the following commands. Note that you will need to replace `<version>` with the version number of the package you downloaded (e.g. `0.1.0`).
+
+You can also install the package from PyPI by running `pip install chatgpt-cli-md`.
 
 ```sh
 pip install chatgpt-cli-md-<version>.tar.gz
@@ -40,9 +44,13 @@ This will automatically install all the required dependencies. You can also buil
 git clone https://github.com/efJerryYang/chatgpt-cli.git
 ```
 
+Install necessary dependencies:
+
 ```sh
 pip install -r requirements.txt
 ```
+
+Build the project into package:
 
 ```sh
 python -m build
