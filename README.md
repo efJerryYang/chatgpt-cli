@@ -109,7 +109,7 @@ These commands enable you to use this tool much like you would use the official 
 
 We have some todos for future improvements, such as:
 
-- [ ] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
+- [x] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
 - [ ] Fix inconsistent operation for `!edit` and `!drop`
 - [ ] `!token`: Count tokens in conversation and display the total number
 - [ ] `!sum`: Generate a summary of the conversation to reduce token usage
