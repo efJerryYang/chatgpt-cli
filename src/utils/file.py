@@ -1,19 +1,6 @@
-from datetime import datetime
-import json
 import os
-import readline
-from typing import Dict, List
-
-import openai
+import json
 import yaml
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.panel import Panel
-from rich import print
-
-
-import json
-import os
 from typing import Dict, List
 
 from chatgpt_cli import __version__
@@ -57,7 +44,7 @@ def load_data(messages: List[Dict[str, str]]) -> str:
     # prompt user to select a file to load
     print("Available data files:\n")
     for i, f in enumerate(files):
-        print(f"{i+1}. {f}")
+        print(f"{i + 1}. {f}")
     for a in range(3):
         selected_file = input(
             f"\nEnter file number to load (1-{len(files)}), or Enter to start a fresh one: "

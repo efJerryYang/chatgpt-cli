@@ -1,21 +1,5 @@
-from datetime import datetime
-import json
-import os
-import readline
-from typing import Dict, List
-
-import openai
-import yaml
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.panel import Panel
-from rich import print
-
-
-from chatgpt_cli import __version__
 from chatgpt_cli.conversation import Conversation
 from utils.io import *
-
 
 
 def is_command(user_input: str) -> bool:
@@ -25,8 +9,8 @@ def is_command(user_input: str) -> bool:
 
 
 def execute_command(
-    user_input: str,
-    conv: Conversation,
+        user_input: str,
+        conv: Conversation,
 ) -> str:
     user_input = user_input.strip()
     if user_input in ["!help", "help"]:

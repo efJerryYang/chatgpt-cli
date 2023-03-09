@@ -1,25 +1,10 @@
-from datetime import datetime
-import json
-import os
-import readline
-from typing import Dict, List
-
-import openai
-import yaml
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.panel import Panel
-from rich import print
-
 import readline
 from typing import Dict
 
+from rich import print
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
-
-
-from chatgpt_cli import __version__
 
 console = Console()
 
@@ -29,7 +14,7 @@ def print(*args, **kwargs) -> None:
 
 
 def printpnl(
-    msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
+        msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
 ) -> None:
     print()
     if markdown:

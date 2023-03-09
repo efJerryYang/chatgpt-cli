@@ -1,15 +1,7 @@
-import os
-from typing import Dict
-
 import openai
-import yaml
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.panel import Panel
-from rich import print
+import os
 
-from . import __version__
-from chatgpt_cli.conversation import generate_response, Conversation
+from chatgpt_cli.conversation import generate_response
 from utils.cmd import *
 from utils.file import *
 from utils.io import *

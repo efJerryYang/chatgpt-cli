@@ -1,19 +1,9 @@
 from datetime import datetime
-import json
-import os
-import readline
-from typing import Dict, List
+from typing import List
 
 import openai
-import yaml
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.panel import Panel
-from rich import print
-from chatgpt_cli import __version__
+import os
 
-
-from utils.io import *
 from utils.file import *
 
 
