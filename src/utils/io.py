@@ -6,6 +6,9 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 
+from chatgpt_cli import __version__
+
+
 console = Console()
 
 
@@ -102,3 +105,19 @@ For more detailed documentation, please visit <link_to_wiki> or <link_to_docs>
 Enjoy your chat!
 """
     printpnl(welcome_msg, title="Welcome")
+
+def show_setup_error_panel(config_path:str):
+    first_launch_msg = f"""
+Welcome to ChatGPT CLI v{__version__}!
+
+It looks like this is the first time you're using this tool.
+
+To use the ChatGPT API you need to provide your OpenAI API key in the `{config_path}` file.
+
+You can create it manually or let this tool help you create it interactively.
+
+You can also import an existing `config.yaml` file which is used in the script version of this tool.
+
+If you don't have an OpenAI API key, you can get one at https://platform.openai.com/account/api-keys
+"""
+    printpnl(first_launch_msg, "ChatGPT CLI Setup", "red", 120)
