@@ -1,16 +1,15 @@
-from datetime import datetime
 import json
 import os
 import readline
-import sys
-from typing import Dict, Tuple, List
+from datetime import datetime
+from typing import Dict, List
 
 import openai
 import yaml
+from rich import print
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
-from rich import print
 
 
 def get_script_dir() -> str:
@@ -30,7 +29,7 @@ def get_config_path() -> str:
 
 
 def printpnl(
-    msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
+        msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
 ) -> None:
     print()
     if markdown:
@@ -132,7 +131,7 @@ def load_data(messages: List[Dict[str, str]]) -> str:
     # prompt user to select a file to load
     print("Available data files:\n")
     for i, f in enumerate(files):
-        print(f"{i+1}. {f}")
+        print(f"{i + 1}. {f}")
     for a in range(3):
         selected_file = input(
             f"\nEnter file number to load (1-{len(files)}), or Enter to start a fresh one: "
@@ -368,8 +367,8 @@ class Conversation:
 
 
 def execute_command(
-    user_input: str,
-    conv: Conversation,
+        user_input: str,
+        conv: Conversation,
 ) -> str:
     user_input = user_input.strip()
     if user_input in ["!help", "help"]:
