@@ -102,26 +102,3 @@ For more detailed documentation, please visit <link_to_wiki> or <link_to_docs>
 Enjoy your chat!
 """
     printpnl(welcome_msg, title="Welcome")
-
-
-def show_setup_error_panel():
-    first_launch_msg = """
-Welcome to ChatGPT CLI!
-
-It looks like this is the first time you're using this tool.
-
-To use the ChatGPT API you need to provide your OpenAI API key in the `config.yaml` file.
-
-To get started, please follow these steps:
-
-1. Copy the `config.yaml.example` file to `config.yaml` in the same directory.
-2. Open `config.yaml` using a text editor an replace `<YOUR_API_KEY>` with your actual OpenAI API key.
-3. Optionally, you can also set a default prompt to use for generating your GPT output.
-
-If you don't have an OpenAI API key, you can get one at https://platform.openai.com/account/api-keys/.
-
-Once you've configured your `config.yaml` file, you can start this tool again.
-
-Thank you for using ChatGPT CLI!
-"""
-    printpnl(first_launch_msg, "ChatGPT CLI Setup", "red", 120)

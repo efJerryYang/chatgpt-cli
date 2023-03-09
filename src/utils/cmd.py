@@ -2,42 +2,41 @@ from chatgpt_cli.conversation import Conversation
 from utils.io import *
 
 
-def is_command(user_input: str) -> bool:
+def is_command(user_msg: str) -> bool:
     """Check if user input is a command"""
     quit_words = ["quit", "exit"]
-    return user_input.startswith("!") or user_input in quit_words
+    return user_msg.startswith("!") or user_msg in quit_words
 
 
 def execute_command(
-        user_input: str,
+        user_msg: str,
         conv: Conversation,
 ) -> str:
-    user_input = user_input.strip()
-    if user_input in ["!help", "help"]:
+    user_msg = user_msg.strip()
+    if user_msg in ["!help", "help"]:
         show_welcome_panel()
-    elif user_input in ["!show", "show"]:
+    elif user_msg in ["!show", "show"]:
         conv.show_history()
-    elif user_input in ["!save", "save"]:
+    elif user_msg in ["!save", "save"]:
         conv.save(False)
-    elif user_input in ["!load", "load"]:
+    elif user_msg in ["!load", "load"]:
         conv.load()
-
         conv.show_history(panel=False)
-    elif user_input in ["!new", "new", "reset", "!reset"]:
+    elif user_msg in ["!new", "new", "reset", "!reset"]:
         conv.reset()
         conv.show_history(panel=False)
-    elif user_input in ["!resend", "resend"]:
+    elif user_msg in ["!resend", "resend"]:
         conv.resend()
-    elif user_input in ["!regen", "regen"]:
+    elif user_msg in ["!regen", "regen"]:
         conv.regen()
-    elif user_input in ["!edit", "edit"]:
+    elif user_msg in ["!edit", "edit"]:
         conv.edit_messages()
-    elif user_input in ["!drop", "drop"]:
+    elif user_msg in ["!drop", "drop"]:
         conv.drop_messages()
-    elif user_input in ["!exit", "!quit", "quit", "exit"]:
+    elif user_msg in ["!exit", "!quit", "quit", "exit"]:
         conv.save(True)
         print("Bye!")
         exit(0)
-    elif user_input.startswith("!"):
+    elif user_msg.startswith("!"):
         print("Invalid command, please try again")
-    return user_input
+    return user_msg

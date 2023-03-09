@@ -248,8 +248,8 @@ class Conversation:
         for i, msg in enumerate(self.messages):
             printpnl(f"### Message {i}", "Dropping Messages", "yellow")
             show_message(msg)
-            user_input = input("Select this message to drop? [y/n]: ").strip()
-            if user_input.lower() == "y":
+            confirm = input("Select this message to drop? [y/n]: ").strip()
+            if confirm.lower() == "y":
                 index.append(i)
                 printmd("**Message selected.**")
             else:
@@ -258,8 +258,8 @@ class Conversation:
             for i in reversed(index):
                 printpnl(f"### Message {i}", "Dropping Messages", "red")
                 show_message(self.messages[i])
-                user_input = input("Drop this message? [y/n]: ").strip()
-                if user_input.lower() == "y":
+                confirm = input("Drop this message? [y/n]: ").strip()
+                if confirm.lower() == "y":
                     self.messages.pop(i)
                     self.modified = True
                     printmd("**Message dropped.**")
