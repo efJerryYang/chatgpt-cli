@@ -114,7 +114,6 @@ proxy:
 We have some todos for future improvements, such as:
 
 - [x] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
-- [ ] Fix inconsistent operation for `!edit` and `!drop`
 - [ ] `!token`: Count tokens in conversation and display the total number
 - [ ] `!sum`: Generate a summary of the conversation to reduce token usage
 - [ ] `!tmpl`: Choose system prompt templates
