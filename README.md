@@ -24,14 +24,14 @@ The required Yython packages can be installed with `pip install -r requirements.
 
 ## Installation
 
-You can install ChatGPT CLI by downloading the package from the [latest release](https://github.com/efJerryYang/chatgpt-cli/releases) and running either of the following commands:
+You can install ChatGPT CLI by downloading the package from the [latest release](https://github.com/efJerryYang/chatgpt-cli/releases) and running either of the following commands. Note that you will need to replace `<version>` with the version number of the package you downloaded (e.g. `0.1.0`). You can also install the package from PyPI by running `pip install chatgpt-cli-md`.
 
 ```sh
-pip install chatgpt-cli-0.1.0.tar.gz
+pip install chatgpt-cli-md-<version>.tar.gz
 ```
 
 ```sh
-pip install chatgpt_cli-1.0.0-py3-none-any.whl
+pip install chatgpt_cli_md-<version>-py3-none-any.whl
 ```
 
 This will automatically install all the required dependencies. You can also build the project and get the binary file to install by cloning the repository from GitHub and running the following commands:
