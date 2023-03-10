@@ -6,7 +6,7 @@
 
 ## Introduction
 
-ChatGPT CLI is a command-line interface tool that connects to the ChatGPT language model using OpenAI's official API key. It features markdown support, allowing you to structure your inputs in a readable and well-organized format for easier reference. The tool also saves conversations in `JSON` format, you can load them with `!load` command. For more command usage, you can type `!help` or see more in the [Commands](#commands) section.
+ChatGPT CLI is a command-line interface tool that connects to the ChatGPT language model using OpenAI's official API key. It features markdown support, allowing you to structure your inputs in a readable and well-organized format for easier reference. The tool also saves conversations in `JSON` format, you can load them with `!load` command. Commands provided enable you to use this tool much like you would use the official web client. For more command usage, you can type `!help` or see more in the [Commands](#commands) section.
 
 Here is a simple demonstration of how to use it:
 
@@ -103,7 +103,7 @@ We've provided several commands to help you use this tool more conveniently. You
 - `!drop`: selects messages for deletion
 - `!exit` or `!quit`: exits the program
 
-These commands enable you to use this tool much like you would use the official web client. If you find that you need additional command support, feel free to open an issue.
+These commands are designed to enable you to use this tool much like you would use the official web client. If you find that you need additional command support, feel free to open an issue.
 
 ## Todos
 

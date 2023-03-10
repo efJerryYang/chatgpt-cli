@@ -74,3 +74,6 @@ sync_bin.*
 script/data/*
 script/config.yaml
 script/config.yml
+secrets/*
+upload.py
+build_and_run.sh
