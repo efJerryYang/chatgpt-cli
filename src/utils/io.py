@@ -67,7 +67,7 @@ def input_error_handler(is_modified:bool, e: Exception) -> None:
             elif isinstance(e, KeyboardInterrupt):
                 printmd("**[Keyboard Interrupted Error]**", newline=False)
                 printpnl("### You have interrupted the program with `Ctrl+C`. This is usually caused by pressing `Ctrl+C`.", "Exit Confirmation", "red")
-                confirm_prompt = f"Are you sure you want to exit{' without saving' if is_modified else ''}? [y/N]: "
+                confirm_prompt = f"Are you sure you want to exit{' without saving' if is_modified else ''}? [Y/n]: "
                 if input(confirm_prompt).lower() == "y":
                     printmd("**Exiting...**", newline=False)
                     exit(0)
