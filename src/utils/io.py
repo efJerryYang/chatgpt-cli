@@ -100,8 +100,8 @@ def user_input(prompt="\nUser: ") -> str:
 
 
 def show_welcome_panel():
-    welcome_msg = """
-Welcome to ChatGPT CLI!
+    welcome_msg = f"""
+Welcome to ChatGPT CLI v{__version__}!
 
 Greetings! Thank you for choosing this CLI tool. This tool is generally developed for personal use purpose. We use OpenAI's official API to interact with the ChatGPT, which would be more stable than the web interface.
 

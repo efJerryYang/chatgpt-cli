@@ -64,7 +64,6 @@ docs/_build/
 # Ignore dist directory
 dist/
 
-
 .python-version
 data/*
 bin/*
@@ -77,3 +76,4 @@ script/config.yml
 secrets/*
 upload.py
 build_and_run.sh
+install_and_run.sh
