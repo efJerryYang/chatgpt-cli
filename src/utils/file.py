@@ -191,10 +191,7 @@ def load_config() -> Dict:
 
 def load_patch() -> Dict:
     """Load the patch file"""
-    patch_path = os.path.join(get_config_dir(), "patch.yaml")
-    if not os.path.exists(patch_path):
-        with open(patch_path, "w") as f:
-            yaml.dump({}, f, indent=2)
+    patch_path = get_patch_path()
     with open(patch_path, "r") as f:
         try:
             patch = yaml.safe_load(f)
@@ -203,6 +200,12 @@ def load_patch() -> Dict:
             exit(1)
     return patch
 
+def get_patch_path():
+    patch_path = os.path.join(get_config_dir(), "patch.yaml")
+    if not os.path.exists(patch_path):
+        with open(patch_path, "w") as f:
+            yaml.dump({}, f, indent=2)
+    return patch_path
 
 def save_patch(patch: Dict):
     """Save the patch file"""
@@ -307,7 +310,7 @@ def create_template(patch: Dict):
     printmd(f"**[Success]**: Template `{template_name}` created")
 
 
-def load_templates() -> Dict:
+def load_templates() -> List[Dict]:
     """Load the templates from the `patch.yaml` file"""
     patch = load_patch()
     return patch.get("templates", [])

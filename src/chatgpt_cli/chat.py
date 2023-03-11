@@ -41,11 +41,12 @@ def main():
 
     conv = Conversation(default_prompt)
     conv.show_history()
+    tmpl = Template()
     while True:
         try:
             user_message = user_input().strip()
             if is_command(user_message):
-                execute_command(user_message, conv)
+                execute_command(user_message, conv, tmpl)
                 continue
             else:
                 conv.add_user_message(user_message)
