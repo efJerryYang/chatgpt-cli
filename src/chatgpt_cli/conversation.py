@@ -314,8 +314,6 @@ class Template:
         cmd = self.__parse_command(cmd)
         if not cmd or cmd[0] == "load":
             self.load(conv=conv)
-            conv.reset()
-            conv.show_history()
         elif cmd[0] == "show":
             self.show()
         elif cmd[0] == "create":
@@ -368,6 +366,8 @@ class Template:
                 if self.id < 0 or self.id >= len(self.templates):
                     raise ValueError
                 conv.switch_template(self.id)
+                conv.reset()
+                conv.show_history()
                 return
             except ValueError:
                 print("Invalid template id, please try again")
