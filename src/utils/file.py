@@ -1,7 +1,7 @@
 import os
 import json
 import yaml
-from typing import Dict, List
+from typing import Callable, Dict, List
 
 from chatgpt_cli import __version__
 from utils.io import *
@@ -184,3 +184,32 @@ def load_config() -> Dict:
             create_data_directory()
 
     return config
+
+
+def load_patch() -> Dict:
+    """Load the patch file"""
+    patch_path = os.path.join(get_config_dir(), "patch.yaml")
+    if not os.path.exists(patch_path):
+        with open(patch_path, "w") as f:
+            yaml.dump({}, f, indent=2)
+    with open(patch_path, "r") as f:
+        try:
+            patch = yaml.safe_load(f)
+        except yaml.YAMLError:
+            print("Error in patch file:", patch_path)
+            exit(1)
+    return patch
+
+
+def save_patch(patch: Dict):
+    """Save the patch file"""
+    patch_path = os.path.join(get_config_dir(), "patch.yaml")
+    with open(patch_path, "w") as f:
+        yaml.dump(patch, f, indent=2)
+    printmd(f"**[Success]**: `patch.yaml` file saved to `{patch_path}`")
+
+
+def update_patch(operation: Callable):
+    patch = load_patch()
+    operation(patch)
+    save_patch(patch=patch)
