@@ -314,6 +314,8 @@ class Template:
         cmd = self.__parse_command(cmd)
         if not cmd or cmd[0] == "load":
             self.load(conv=conv)
+            conv.reset()
+            conv.show_history()
         elif cmd[0] == "show":
             self.show()
         elif cmd[0] == "create":
@@ -335,8 +337,12 @@ class Template:
         for i, t in enumerate(self.templates):
             print(f"{i + 1}. {t['name']} ({t['alias']})")
             print(f"    Description: {t['description']}")
+            print(f"    Messages:")
             for j, p in enumerate(t["prompts"]):
-                print(f"message: {j}. {p['role']}: {p['content']}")
+                print(f"      {j}. {p['role']}: {p['content']}")
+            print(f"    References:")
+            for j, r in enumerate(t["references"]):
+                print(f"      {j}. {r['role']}: {r['content']}")
             print()
 
     def create(self):
