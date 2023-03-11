@@ -2,6 +2,7 @@ from chatgpt_cli.conversation import Conversation
 from chatgpt_cli.template import Template
 from utils.io import *
 
+
 def is_command(user_msg: str) -> bool:
     """Check if user input is a command"""
     quit_words = ["quit", "exit"]
@@ -41,7 +42,7 @@ def execute_command(
     elif user_msg.startswith("!tmpl"):
         tmpl.execute_command(conv, user_msg)
 
-        
+
     elif user_msg.startswith("!"):
         print("Invalid command, please try again")
     return user_msg

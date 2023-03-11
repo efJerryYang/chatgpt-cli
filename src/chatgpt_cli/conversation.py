@@ -8,6 +8,7 @@ from utils.file import *
 
 from chatgpt_cli.template import Template
 
+
 def generate_response(messages: List[Dict[str, str]]) -> str:
     try:
         response = openai.ChatCompletion.create(

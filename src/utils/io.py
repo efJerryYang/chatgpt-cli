@@ -56,7 +56,8 @@ def assistant_output(msg: str) -> None:
 def system_output(msg: str) -> None:
     printmd("**System:** {}".format(msg))
 
-def input_error_handler(is_modified:bool, e: Exception) -> None:
+
+def input_error_handler(is_modified: bool, e: Exception) -> None:
     initial_error = e
     for i in range(3):
         try:
@@ -66,7 +67,9 @@ def input_error_handler(is_modified:bool, e: Exception) -> None:
                 exit(0)
             elif isinstance(e, KeyboardInterrupt):
                 printmd("**[Keyboard Interrupted Error]**", newline=False)
-                printpnl("### You have interrupted the program with `Ctrl+C`. This is usually caused by pressing `Ctrl+C`.", "Exit Confirmation", "red")
+                printpnl(
+                    "### You have interrupted the program with `Ctrl+C`. This is usually caused by pressing `Ctrl+C`.",
+                    "Exit Confirmation", "red")
                 confirm_prompt = f"Are you sure you want to exit{' without saving' if is_modified else ''}? [Y/n]: "
                 if input(confirm_prompt).lower() == "y":
                     printmd("**Exiting...**", newline=False)
@@ -75,11 +78,13 @@ def input_error_handler(is_modified:bool, e: Exception) -> None:
                     printmd("**[Resuming]**")
                     return
             else:
-                printmd("**[Unknown Error]** This a an unhandled error. Please report this issue on GitHub: https://github.com/efJerryYang/chatgpt-cli/issues")
+                printmd(
+                    "**[Unknown Error]** This a an unhandled error. Please report this issue on GitHub: https://github.com/efJerryYang/chatgpt-cli/issues")
                 raise e
         except Exception as e:
             continue
-    
+
+
 def user_input(prompt="\nUser: ") -> str:
     """
     Get user input with support for multiple lines without submitting the message.
