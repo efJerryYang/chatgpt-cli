@@ -302,3 +302,8 @@ def create_template(patch: Dict):
     template_list.append(template)
     patch["templates"] = template_list
     printmd(f"**[Success]**: Template `{template_name}` created")
+
+def load_templates() -> Dict:
+    """Load the templates from the `patch.yaml` file"""
+    patch = load_patch()
+    return patch.get("templates", [])
