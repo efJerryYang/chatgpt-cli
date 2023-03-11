@@ -1,6 +1,6 @@
 from chatgpt_cli.conversation import Conversation
+from chatgpt_cli.template import Template
 from utils.io import *
-
 
 def is_command(user_msg: str) -> bool:
     """Check if user input is a command"""
@@ -11,6 +11,7 @@ def is_command(user_msg: str) -> bool:
 def execute_command(
         user_msg: str,
         conv: Conversation,
+        tmpl: Template,
 ) -> str:
     user_msg = user_msg.strip()
     if user_msg in ["!help", "help"]:
@@ -37,8 +38,10 @@ def execute_command(
         conv.save(True)
         print("Bye!")
         exit(0)
-    elif user_msg in ["!tmpl","!template", "tmpl", "template"]:
-        conv.show_templates()
+    elif user_msg.startswith("!tmpl"):
+        tmpl.execute_command(conv, user_msg)
+
+        
     elif user_msg.startswith("!"):
         print("Invalid command, please try again")
     return user_msg

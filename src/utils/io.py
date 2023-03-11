@@ -120,6 +120,13 @@ Here are some useful commands you may want to use:
 - `!drop`: select messages to drop
 - `!exit` or `!quit`: exit the program
 
+Features (under development):
+- `!tmpl`: select a template to use
+- `!tmpl show`: show all templates with complete information
+- `!tmpl create`: create a new template
+- `!tmpl edit`: edit an existing template (not implemented yet)
+- `!tmpl drop`: drop an existing template (not implemented yet)
+
 You can enter these commands at any time during a conversation when you are prompted with `User:`.
 
 For more detailed documentation, please visit <link_to_wiki> or <link_to_docs>
