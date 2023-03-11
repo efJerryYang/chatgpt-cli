@@ -46,12 +46,12 @@ def load_data(messages: List[Dict[str, str]]) -> str:
     for i, f in enumerate(files):
         print(f"{i + 1}. {f}")
     for a in range(3):
-        selected_file = input(
-            f"\nEnter file number to load (1-{len(files)}), or Enter to start a fresh one: "
-        )
-        if not selected_file.strip():
-            return ""
         try:
+            selected_file = input(
+                f"\nEnter file number to load (1-{len(files)}), or Enter to start a fresh one: "
+            )
+            if not selected_file.strip():
+                return ""
             index = int(selected_file) - 1
             if not 0 <= index < len(files):
                 raise ValueError()
@@ -64,8 +64,12 @@ def load_data(messages: List[Dict[str, str]]) -> str:
             return filepath
         except (ValueError, IndexError):
             print("Invalid input, please try again")
-    print("Too many invalid inputs, aborting")
-    exit(1)
+        except (KeyboardInterrupt, EOFError):
+            print("Aborting")
+            exit(1)
+    printmd("**[Warning]**: Too many invalid inputs, starting a fresh one")
+    return ""
+    
 
 
 def import_data_directory():
@@ -303,7 +307,16 @@ def create_template(patch: Dict):
     patch["templates"] = template_list
     printmd(f"**[Success]**: Template `{template_name}` created")
 
+
 def load_templates() -> Dict:
     """Load the templates from the `patch.yaml` file"""
     patch = load_patch()
     return patch.get("templates", [])
+
+
+def edit_template(patch: Dict):
+    printpnl("**[Error]**: Not implemented yet")
+
+
+def drop_template(patch: Dict):
+    printpnl("**[Error]**: Not implemented yet")

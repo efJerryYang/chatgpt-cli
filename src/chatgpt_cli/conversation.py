@@ -5,7 +5,7 @@ import openai
 import os
 
 from utils.file import *
-
+from .template import Template
 
 def generate_response(messages: List[Dict[str, str]]) -> str:
     try:
@@ -65,7 +65,7 @@ class Conversation:
         self.default_prompt = list(default_prompt)
         self.filepath = ""
         self.modified = False
-        self.templates = load_templates()
+        self.template = Template()
 
     def __len__(self) -> int:
         return len(self.messages)
@@ -270,15 +270,7 @@ class Conversation:
         else:
             printmd("**No message selected. Dropping cancelled.**")
 
-    def show_templates(self) -> None:
-        """Show templates"""
-        printpnl("### Templates", "ChatGPT CLI", "green")
-        for i, template in enumerate(self.templates):
-            print(f"Template {i}: {template.get('name', '')}")
-
-    def show_templates_full(self) -> None:
-        """Show templates"""
-        printpnl("### Templates", "ChatGPT CLI", "green")
-        for i, template in enumerate(self.templates):
-            printpnl(f"### Template {i}", "Templates", "green")
-            show_message(template)
+    def switch_template(self, template: Template):
+        """Switch template"""
+        self.template = template
+        printmd(f"**Template switched to {self.template.name}.**")
