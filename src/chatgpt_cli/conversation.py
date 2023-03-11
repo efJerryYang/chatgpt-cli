@@ -5,7 +5,8 @@ import openai
 import os
 
 from utils.file import *
-from .template import Template
+
+from chatgpt_cli.template import Template
 
 def generate_response(messages: List[Dict[str, str]]) -> str:
     try:

@@ -3,7 +3,7 @@ from typing import List, Dict
 import os
 
 from utils.file import *
-from .conversation import Conversation
+from chatgpt_cli.conversation import Conversation
 
 """
 Features (under development):
