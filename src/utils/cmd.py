@@ -37,6 +37,8 @@ def execute_command(
         conv.save(True)
         print("Bye!")
         exit(0)
+    elif user_msg in ["!tmpl","!template", "tmpl", "template"]:
+        conv.show_templates()
     elif user_msg.startswith("!"):
         print("Invalid command, please try again")
     return user_msg

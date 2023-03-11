@@ -65,6 +65,7 @@ class Conversation:
         self.default_prompt = list(default_prompt)
         self.filepath = ""
         self.modified = False
+        self.templates = load_templates()
 
     def __len__(self) -> int:
         return len(self.messages)
@@ -268,3 +269,16 @@ class Conversation:
             printmd("**Selected messages dropped.**")
         else:
             printmd("**No message selected. Dropping cancelled.**")
+
+    def show_templates(self) -> None:
+        """Show templates"""
+        printpnl("### Templates", "ChatGPT CLI", "green")
+        for i, template in enumerate(self.templates):
+            print(f"Template {i}: {template.get('name', '')}")
+
+    def show_templates_full(self) -> None:
+        """Show templates"""
+        printpnl("### Templates", "ChatGPT CLI", "green")
+        for i, template in enumerate(self.templates):
+            printpnl(f"### Template {i}", "Templates", "green")
+            show_message(template)
