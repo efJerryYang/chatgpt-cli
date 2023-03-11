@@ -213,3 +213,92 @@ def update_patch(operation: Callable):
     patch = load_patch()
     operation(patch)
     save_patch(patch=patch)
+
+
+def create_template(patch: Dict):
+    """Create a new template in the `patch.yaml` file"""
+    template_name = input("Enter template name: ").strip()
+    if template_name == "":
+        printmd("**[Error]**: Template name cannot be empty")
+        return
+    template_alias = input("Enter template alias (leave blank to skip): ").strip()
+    if template_alias == "":
+        template_alias = None
+    template_list = patch.get("templates", [])
+    for template in template_list:
+        if template["name"] == template_name:
+            printmd(
+                f"**[Error]**: Template `{template_name}` already exists, pick another name"
+            )
+            return
+        if template_alias is not None and template["alias"] == template_alias:
+            printmd(
+                f"**[Warning]**: Template alias `{template_alias}` already exists, leaving it blank..."
+            )
+            template_alias = None
+
+    template = {}
+    template["name"] = template_name
+    template["alias"] = template_alias if template_alias is not None else ""
+    template["description"] = input(
+        "Enter a simple template description (leave blank to skip): "
+    ).strip()
+    template["prompts"] = []
+    while True:
+        try:
+            printpnl("### Add a new prompt (leave blank to skip)")
+            role = input("Enter prompt role system/user/assistant [s/u/a]: ").strip()
+            if role == "":
+                break
+            r = role.lower()
+            if r in ["s", "system"]:
+                role = "system"
+            elif r in ["u", "user"]:
+                role = "user"
+            elif r in ["a", "assistant"]:
+                role = "assistant"
+            else:
+                printmd(f"**[Error]**: Invalid role `{role}`, please try again")
+                continue
+            message = {}
+            message["role"] = role
+            message["content"] = user_input(
+                f"Enter prompt content for [{role}]: "
+            ).strip()
+            template["prompts"].append(message)
+        except KeyboardInterrupt as e:
+            input_error_handler(True, e)
+            continue
+        except EOFError as e:
+            input_error_handler(True, e)
+            continue
+    if len(template["prompts"]) == 0:
+        printmd("**[Warning]**: No prompts added, nothing to save")
+        return
+    # add reference
+    check = input("Do you want to add references to the template? [y/n]: ").strip()
+    if check.lower() == "y":
+        template["references"] = []
+        while True:
+            try:
+                printpnl("### Add a new reference (leave blank to skip)")
+                reference = {}
+                reference["url"] = input("Enter reference url: ").strip()
+                if reference["url"] == "":
+                    break
+                reference["title"] = input("Enter reference title: ").strip()
+                if reference["title"] == "":
+                    printmd("**[Warning]**: Reference title is empty, skipping...")
+                template["references"].append(reference)
+            except KeyboardInterrupt as e:
+                input_error_handler(True, e)
+                continue
+            except EOFError as e:
+                input_error_handler(True, e)
+                continue
+    else:
+        template["references"] = [{"url": "", "title": ""}]
+    # save to file
+    template_list.append(template)
+    patch["templates"] = template_list
+    printmd(f"**[Success]**: Template `{template_name}` created")
