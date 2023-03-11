@@ -16,7 +16,7 @@ def print(*args, **kwargs) -> None:
 
 
 def printpnl(
-        msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
+    msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
 ) -> None:
     print()
     if markdown:
@@ -69,7 +69,9 @@ def input_error_handler(is_modified: bool, e: Exception) -> None:
                 printmd("**[Keyboard Interrupted Error]**", newline=False)
                 printpnl(
                     "### You have interrupted the program with `Ctrl+C`. This is usually caused by pressing `Ctrl+C`.",
-                    "Exit Confirmation", "red")
+                    "Exit Confirmation",
+                    "red",
+                )
                 confirm_prompt = f"Are you sure you want to exit{' without saving' if is_modified else ''}? [Y/n]: "
                 if input(confirm_prompt).lower() == "y":
                     printmd("**Exiting...**", newline=False)
@@ -79,7 +81,8 @@ def input_error_handler(is_modified: bool, e: Exception) -> None:
                     return
             else:
                 printmd(
-                    "**[Unknown Error]** This a an unhandled error. Please report this issue on GitHub: https://github.com/efJerryYang/chatgpt-cli/issues")
+                    "**[Unknown Error]** This a an unhandled error. Please report this issue on GitHub: https://github.com/efJerryYang/chatgpt-cli/issues"
+                )
                 raise e
         except Exception as e:
             continue
@@ -126,7 +129,7 @@ Here are some useful commands you may want to use:
 - `!exit` or `!quit`: exit the program
 
 Features (under development):
-- `!tmpl`: select a template to use
+- `!tmpl` or `!tmpl load`: select a template to use
 - `!tmpl show`: show all templates with complete information
 - `!tmpl create`: create a new template
 - `!tmpl edit`: edit an existing template (not implemented yet)

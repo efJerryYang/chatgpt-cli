@@ -107,6 +107,14 @@ proxy:
 - `!edit` 用于编辑会话，双方的话都可以编辑
 - `!exit` 或者 `!quit` 退出，未保存的情况下也会提示是否保存
 
+Features (under development):
+
+- `!tmpl` or `!tmpl load`: select a template to use
+- `!tmpl show`: show all templates with complete information
+- `!tmpl create`: create a new template
+- `!tmpl edit`: edit an existing template (not implemented yet)
+- `!tmpl drop`: drop an existing template (not implemented yet)
+
 如果你需要新的命令来实现某个特定的功能，可以在这个仓库下开一个 issue，我根据我的时间安排会尽量完成的。
 
 ## Todos

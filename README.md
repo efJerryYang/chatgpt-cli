@@ -103,6 +103,14 @@ We've provided several commands to help you use this tool more conveniently. You
 - `!drop`: selects messages for deletion
 - `!exit` or `!quit`: exits the program
 
+Features (under development):
+
+- `!tmpl` or `!tmpl load`: select a template to use
+- `!tmpl show`: show all templates with complete information
+- `!tmpl create`: create a new template
+- `!tmpl edit`: edit an existing template (not implemented yet)
+- `!tmpl drop`: drop an existing template (not implemented yet)
+
 These commands are designed to enable you to use this tool much like you would use the official web client. If you find that you need additional command support, feel free to open an issue.
 
 ## Todos
@@ -112,7 +120,7 @@ We have some todos for future improvements, such as:
 - [x] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
 - [ ] `!token`: Count tokens in conversation and display the total number
 - [ ] `!sum`: Generate a summary of the conversation to reduce token usage
-- [ ] `!tmpl`: Choose system prompt templates
+- [x] `!tmpl`: Choose system prompt templates
 - [ ] `!conv`: Show conversation list, Delete and Rename saved conversations
 - [ ] `!sys <command>`: Enable you to run system command
 
