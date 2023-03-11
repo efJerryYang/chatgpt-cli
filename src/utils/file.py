@@ -69,7 +69,6 @@ def load_data(messages: List[Dict[str, str]]) -> str:
             exit(1)
     printmd("**[Warning]**: Too many invalid inputs, starting a fresh one")
     return ""
-    
 
 
 def import_data_directory():

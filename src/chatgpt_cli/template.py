@@ -48,11 +48,11 @@ class Template:
         if only_name:
             print("Templates:")
             for i, t in enumerate(self.templates):
-                print(f"{i+1}. {t['name']} ({t['alias']})")
+                print(f"{i + 1}. {t['name']} ({t['alias']})")
             return
         print("Templates:")
         for i, t in enumerate(self.templates):
-            print(f"{i+1}. {t['name']} ({t['alias']})")
+            print(f"{i + 1}. {t['name']} ({t['alias']})")
             print(f"    {t['id']}")
             print(f"    {t['description']}")
             print(f"    {t['prompts']}")
