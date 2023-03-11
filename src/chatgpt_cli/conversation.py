@@ -6,8 +6,6 @@ import os
 
 from utils.file import *
 
-from chatgpt_cli.template import Template
-
 
 def generate_response(messages: List[Dict[str, str]]) -> str:
     try:
@@ -67,7 +65,7 @@ class Conversation:
         self.default_prompt = list(default_prompt)
         self.filepath = ""
         self.modified = False
-        self.template = Template()
+        self.template_object = Template()
 
     def __len__(self) -> int:
         return len(self.messages)
@@ -272,7 +270,106 @@ class Conversation:
         else:
             printmd("**No message selected. Dropping cancelled.**")
 
-    def switch_template(self, template: Template):
+    def switch_template(self, id):
         """Switch template"""
-        self.template = template
-        printmd(f"**Template switched to {self.template.name}.**")
+        self.template_object.id = id
+        roles = [msg['role'] for msg in self.template_object.templates[id]["prompts"]]
+        if 'system' in roles:
+            self.default_prompt = list(self.template_object.templates[id]["prompts"])
+        else:
+            self.default_prompt.extend(list(self.template_object.templates[id]["prompts"]))
+        printmd(f"**Template switched to {self.template_object.get_name()}.**")
+
+
+"""
+Features (under development):
+- `!tmpl`: select a template to use
+- `!tmpl show`: show all templates with complete information
+- `!tmpl create`: create a new template
+- `!tmpl edit`: edit an existing template
+- `!tmpl drop`: drop an existing template
+"""
+
+
+class Template:
+    def __init__(self) -> None:
+        self.templates = self.__load_templates()
+        self.id = None
+
+    def get_name(self) -> str:
+        return self.templates[self.id]["name"]
+
+    def __load_templates(self) -> List[Dict]:
+        return load_templates()
+
+    def __parse_command(self, cmd: str) -> List[str]:
+        cmd = cmd.strip()
+        if cmd.startswith("!tmpl"):
+            cmd = cmd[5:].strip()
+        else:
+            raise ValueError(f"Invalid command {cmd} for template")
+        return cmd.split()
+
+    def execute_command(self, cmd: str, conv: Conversation):
+        cmd = self.__parse_command(cmd)
+        if not cmd or cmd[0] == "load":
+            self.load(conv=conv)
+        elif cmd[0] == "show":
+            self.show()
+        elif cmd[0] == "create":
+            self.create()
+        elif cmd[0] == "edit":
+            self.edit()
+        elif cmd[0] == "drop":
+            self.drop()
+        else:
+            printmd("**[Error]: Invalid command.**")
+
+    def show(self, only_name: bool = False):
+        print("Config Directory:", get_config_dir())
+        print(f"Templates (in {get_patch_path()}):\n")
+        if only_name:
+            for i, t in enumerate(self.templates):
+                print(f"{i + 1}. {t['name']} ({t['alias']})")
+            return
+        for i, t in enumerate(self.templates):
+            print(f"{i + 1}. {t['name']} ({t['alias']})")
+            print(f"    Description: {t['description']}")
+            for j, p in enumerate(t["prompts"]):
+                print(f"message: {j}. {p['role']}: {p['content']}")
+            print()
+
+    def create(self):
+        update_patch(create_template)
+
+    def edit(self):
+        update_patch(edit_template)
+
+    def drop(self):
+        update_patch(drop_template)
+
+    def load(self, conv: Conversation):
+        self.show(only_name=True)
+        for i in range(3):
+            try:
+                selected_id = input(
+                    "\nPlease select a template (leave blank to skip): "
+                ).strip()
+                if not selected_id:
+                    printmd("**No template selected.**")
+                    return
+                self.id = int(selected_id) - 1
+                if self.id < 0 or self.id >= len(self.templates):
+                    raise ValueError
+                conv.switch_template(self.id)
+                return
+            except ValueError:
+                print("Invalid template id, please try again")
+            except KeyboardInterrupt:
+                print()
+                return
+            except EOFError:
+                printmd("**[EOF Error]: Aborting")
+                exit(1)
+        print("Too many invalid inputs, not switching template")
+        return
