@@ -34,6 +34,33 @@ def setup_runtime_env() -> Dict:
     return config
 
 
+def read_message(conv, tmpl):
+    user_message = user_input().strip()
+    if user_message == "":
+        return
+
+    if is_command(user_message):
+        execute_command(user_message, conv, tmpl)
+        return
+    conv.add_user_message(user_message)
+
+    assistant_message = generate_response(conv.messages)
+    if assistant_message:
+        assistant_output(assistant_message)
+        conv.add_assistant_message(assistant_message)
+        return
+    conv.save(True)
+
+
+def loop(conv, tmpl):
+    try:
+        read_message(conv, tmpl)
+    except KeyboardInterrupt as e:
+        input_error_handler(conv.modified, e)
+    except EOFError as e:
+        input_error_handler(conv.modified, e)
+
+
 def main():
     config = setup_runtime_env()
     default_prompt = config["openai"]["default_prompt"]
@@ -43,30 +70,7 @@ def main():
     conv.show_history()
     tmpl = Template()
     while True:
-        try:
-            user_message = user_input().strip()
-            if user_message == "":
-                continue
-
-            if is_command(user_message):
-                execute_command(user_message, conv, tmpl)
-                continue
-            else:
-                conv.add_user_message(user_message)
-            assistant_message = generate_response(conv.messages)
-            if assistant_message:
-                assistant_output(assistant_message)
-                conv.add_assistant_message(assistant_message)
-                continue
-            else:
-                conv.save(True)
-        except KeyboardInterrupt as e:
-            input_error_handler(conv.modified, e)
-            continue
-        except EOFError as e:
-            input_error_handler(conv.modified, e)
-            continue
-
+        loop(conv, tmpl)
 
 if __name__ == "__main__":
     main()
