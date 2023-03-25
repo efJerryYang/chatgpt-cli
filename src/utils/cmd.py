@@ -34,6 +34,8 @@ def execute_command(
         conv.edit_messages()
     elif user_msg in ["!drop", "drop"]:
         conv.drop_messages()
+    elif user_msg in ["!editor", "editor"]:
+        set_input_from_editor(True)
     elif user_msg in ["!exit", "!quit", "quit", "exit"]:
         conv.save(True)
         print("Bye!")
