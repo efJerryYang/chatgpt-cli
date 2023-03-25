@@ -45,6 +45,9 @@ def main():
     while True:
         try:
             user_message = user_input().strip()
+            if user_message == "":
+                continue
+
             if is_command(user_message):
                 execute_command(user_message, conv, tmpl)
                 continue
