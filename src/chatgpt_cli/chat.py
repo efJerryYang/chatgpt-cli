@@ -35,7 +35,7 @@ def setup_runtime_env() -> Dict:
 
 
 def read_message(conv, tmpl):
-    user_message = user_input().strip()
+    user_message = user_input()
     if user_message == "":
         return
 
@@ -71,6 +71,7 @@ def main():
     tmpl = Template()
     while True:
         loop(conv, tmpl)
+
 
 if __name__ == "__main__":
     main()
