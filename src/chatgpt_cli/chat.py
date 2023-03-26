@@ -38,19 +38,22 @@ def read_message(conv, tmpl):
     user_message = user_input()
 
     if is_command(user_message):
+        printmd("**[Command Executed]**")
         user_message = execute_command(user_message, conv, tmpl)
+        user_message = post_command_process(user_message)
 
     if user_message == "":
         return
 
     conv.add_user_message(user_message)
+    printmd("**[Input Submitted]**")
 
     assistant_message = generate_response(conv.messages)
     if assistant_message:
         assistant_output(assistant_message)
         conv.add_assistant_message(assistant_message)
-        return
-    conv.save(True)
+    else:
+        conv.save(True)
 
 
 def loop(conv, tmpl):
@@ -69,6 +72,7 @@ def main():
 
     conv = Conversation(default_prompt)
     conv.show_history()
+
     tmpl = Template()
     while True:
         loop(conv, tmpl)

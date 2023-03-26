@@ -103,7 +103,7 @@ def input_from_editor() -> str:
         subprocess.call([editor, tf.name])
 
         tf.seek(0)
-        msg = tf.read().decode()
+        msg = tf.read().decode().strip()
         return msg
 
 
@@ -122,9 +122,7 @@ def user_input(prompt="\nUser: ") -> str:
         prompt = "\r" + " " * len(prompt) + "\r" + " .... " + readline.get_line_buffer()
     # Print a message indicating that the input has been submitted
     msg = "\n".join(lines).strip()
-    if msg:
-        printmd("**[Input Submitted]**")
-    else:
+    if not msg:
         printmd("**[Empty Input Skipped]**")
     return msg
 
@@ -139,7 +137,7 @@ def user_input_from_editor():
 
         subprocess.call([editor, tf.name])
         tf.seek(0)
-        msg = tf.read().decode("utf-8")
+        msg = tf.read().decode("utf-8").strip()
     return msg
 
 
@@ -162,6 +160,7 @@ Here are some useful commands you may want to use:
 - `!resend`: resend your last prompt to generate response
 - `!edit`: select messages to edit
 - `!drop`: select messages to drop
+- `!editor`: use your default editor (e.g. vim) to submit a message
 - `!exit` or `!quit`: exit the program
 
 Features (under development):
