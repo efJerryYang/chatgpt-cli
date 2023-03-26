@@ -21,7 +21,7 @@ classifiers = [
   "Operating System :: OS Independent",
 ]
 scripts = { chatgpt-cli = "chatgpt_cli.chat:main" }
-dependencies = ["openai >= 0.27.0", "pyyaml >= 6.0", "rich >= 13.3.1"]
+dependencies = ["openai >= 0.27.0", "pyyaml >= 6.0", "rich >= 13.3.1", "pyreadline3 >= 3.4.1"]
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
