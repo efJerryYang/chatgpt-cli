@@ -14,8 +14,6 @@ from chatgpt_cli import __version__
 
 console = Console()
 
-input_from_editor = False
-
 
 def print(*args, **kwargs) -> None:
     console.print(*args, **kwargs)
@@ -94,19 +92,25 @@ def input_error_handler(is_modified: bool, e: Exception) -> None:
             continue
 
 
-def set_input_from_editor(new_value):
-    global input_from_editor
-    input_from_editor = new_value
+def input_from_editor() -> str:
+    editor = os.environ.get("EDITOR", "vim")
+    initial_message = b""
+
+    with tempfile.NamedTemporaryFile(suffix=".tmp") as tf:
+        tf.write(initial_message)
+        tf.flush()
+
+        subprocess.call([editor, tf.name])
+
+        tf.seek(0)
+        msg = tf.read().decode()
+        return msg
 
 
 def user_input(prompt="\nUser: ") -> str:
     """
     Get user input with support for multiple lines without submitting the message.
     """
-    if input_from_editor:
-        set_input_from_editor(False)
-        return user_input_from_editor()
-
     # Use readline to handle user input
     lines = []
     while True:

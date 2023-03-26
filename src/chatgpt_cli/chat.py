@@ -36,12 +36,13 @@ def setup_runtime_env() -> Dict:
 
 def read_message(conv, tmpl):
     user_message = user_input()
+
+    if is_command(user_message):
+        user_message = execute_command(user_message, conv, tmpl)
+
     if user_message == "":
         return
 
-    if is_command(user_message):
-        execute_command(user_message, conv, tmpl)
-        return
     conv.add_user_message(user_message)
 
     assistant_message = generate_response(conv.messages)
