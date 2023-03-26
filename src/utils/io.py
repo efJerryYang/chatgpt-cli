@@ -127,20 +127,6 @@ def user_input(prompt="\nUser: ") -> str:
     return msg
 
 
-def user_input_from_editor():
-    editor = os.environ.get("EDITOR", "vim")
-    initial_message = b""
-
-    with tempfile.NamedTemporaryFile(suffix=".tmp") as tf:
-        tf.write(initial_message)
-        tf.flush()
-
-        subprocess.call([editor, tf.name])
-        tf.seek(0)
-        msg = tf.read().decode("utf-8").strip()
-    return msg
-
-
 def show_welcome_panel():
     welcome_msg = f"""
 Welcome to ChatGPT CLI v{__version__}!
