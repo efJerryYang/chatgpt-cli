@@ -119,7 +119,8 @@ def user_input(prompt="\nUser: ") -> str:
             break
         lines.append(line)
         # Update the prompt using readline
-        prompt = "\r" + " " * len(prompt) + "\r" + " .... " + readline.get_line_buffer()
+        prompt = "\r" + " " * len(prompt) + "\r" + " .... "
+        readline.get_line_buffer()
     # Print a message indicating that the input has been submitted
     msg = "\n".join(lines).strip()
     if not msg:
