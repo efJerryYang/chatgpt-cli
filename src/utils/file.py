@@ -11,7 +11,7 @@ def get_data_dir(create=True) -> str:
     """Data directory: `${HOME}/.config/chatgpt-cli/data`"""
     data_dir = os.path.join(get_config_dir(), "data")
     if create and not os.path.exists(data_dir):
-        os.mkdir(data_dir)
+        os.makedirs(data_dir)
     return data_dir
 
 
@@ -101,7 +101,7 @@ def get_config_dir() -> str:
     """Config directory: `${HOME}/.config/chatgpt-cli`"""
     config_dir = os.path.join(os.path.expanduser("~"), ".config", "chatgpt-cli")
     if not os.path.exists(config_dir):
-        os.mkdir(config_dir)
+        os.makedirs(config_dir)
     return config_dir
 
 
