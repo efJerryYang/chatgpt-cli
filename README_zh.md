@@ -1,14 +1,19 @@
 # ChatGPT CLI
 
-[![PyPI](https://img.shields.io/pypi/v/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![PyPI - License](https://img.shields.io/pypi/l/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/) [![Stars](https://img.shields.io/github/stars/efJerryYang/chatgpt-cli)](https://github.com/efJerryYang/chatgpt-cli/stargazers)
+[![PyPI](https://img.shields.io/pypi/v/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/)
+[![PyPI - License](https://img.shields.io/pypi/l/chatgpt-cli-md)](https://pypi.org/project/chatgpt-cli-md/)
+[![Stars](https://img.shields.io/github/stars/efJerryYang/chatgpt-cli)](https://github.com/efJerryYang/chatgpt-cli/stargazers)
 
 [English](README.md)
 
 ## 简介
 
-ChatGPT CLI 是一个使用 OpenAI 官方 API 和 ChatGPT 交互的命令行工具，支持 Markdown 语法的输入和输出，通过 `!show` 可以用 Markdown 渲染展示当前对话。
+ChatGPT CLI 是一个使用 OpenAI 官方 API 和 ChatGPT 交互的命令行工具，支持 Markdown 语法的输入和输出，通过 `!show` 可以用
+Markdown 渲染展示当前对话。
 
-对话记录保存在 `JSON` 文件中，可以通过 `!load` 。提供的命令能够让你有接近官方 web 端功能的使用体验。更多的命令使用可以通过 `!help` 命令来查看，或者参考[命令](#命令)部分
+对话记录保存在 `JSON` 文件中，可以通过 `!load` 。提供的命令能够让你有接近官方 web 端功能的使用体验。更多的命令使用可以通过 `!help`
+命令来查看，或者参考[命令](#%E5%91%BD%E4%BB%A4)部分
 
 以下是一个简要的展示：
 
@@ -18,7 +23,8 @@ ChatGPT CLI 是一个使用 OpenAI 官方 API 和 ChatGPT 交互的命令行工�
 
 ## 准备
 
-运行 ChatGPT CLI 要求 Python 3.8 及以上版本，因为使用了 `importlib.metadata` 特性，但是这一特性在 3.8 及以后的版本才加入。可以通过在控制台运行 `python -V` 来查看当前环境的 Python 版本。
+运行 ChatGPT CLI 要求 Python 3.8 及以上版本，因为使用了 `importlib.metadata` 特性，但是这一特性在 3.8
+及以后的版本才加入。可以通过在控制台运行 `python -V` 来查看当前环境的 Python 版本。
 
 你同样需要一个 OpenAI 的 API key，可以从[官网](https://platform.openai.com/account/api-keys)获取。
 
@@ -30,7 +36,8 @@ ChatGPT CLI 是一个使用 OpenAI 官方 API 和 ChatGPT 交互的命令行工�
 
 ## 安装
 
-可以从 [latest release](https://github.com/efJerryYang/chatgpt-cli/releases) 下载最新版本的包，运行以下两个命令之一进行安装。你需要注意的是，请将 `<version>` 替换为你下载的版本号，如 `0.1.0`。
+可以从 [latest release](https://github.com/efJerryYang/chatgpt-cli/releases)
+下载最新版本的包，运行以下两个命令之一进行安装。你需要注意的是，请将 `<version>` 替换为你下载的版本号，如 `0.1.0`。
 
 你也可以选择执行 `pip install chatgpt-cli-md` 从 PyPI 安装。
 
@@ -72,9 +79,14 @@ python -m build
 chatgpt-cli
 ```
 
-如果你是第一次运行，将提示你配置 `config.yaml` 文件，以及选择是否导入之前版本 `data` 目录下的对话记录。 如果程序在 `${HOME}/.config/chatgpt-cli/config.yaml` 找不到配置文件，你可以选择根据交互提示新建一个，或者从原来 `config.yaml` 的路径导入。如果你选择新建一个，你需要根据提示输入你的 OpenAI API key，并且设置代理（如果你使用代理的话）。你可以从[这里](https://platform.openai.com/account/api-keys) 获取一个 OpenAI API key。
+如果你是第一次运行，将提示你配置 `config.yaml` 文件，以及选择是否导入之前版本 `data` 目录下的对话记录。 如果程序在
+`${HOME}/.config/chatgpt-cli/config.yaml` 找不到配置文件，你可以选择根据交互提示新建一个，或者从原来 `config.yaml`
+的路径导入。如果你选择新建一个，你需要根据提示输入你的 OpenAI API
+key，并且设置代理（如果你使用代理的话）。你可以从[这里](https://platform.openai.com/account/api-keys) 获取一个 OpenAI
+API key。
 
-在配置完成之后，你会看到一个欢迎界面，目前只支持来英文显示，你可以正常使用中文和 ChatGPT 交流。欢迎界面也会呈现命令的帮助信息，此时你就已经可以开始和 ChatGPT 对话了。
+在配置完成之后，你会看到一个欢迎界面，目前只支持来英文显示，你可以正常使用中文和 ChatGPT 交流。欢迎界面也会呈现命令的帮助信息，此时你就已经可以开始和 ChatGPT
+对话了。
 
 一个 `config.yaml` 的模板如下：
 
@@ -94,7 +106,8 @@ proxy:
 
 ## 命令
 
-这些命令可以很方便的帮助我们使用这个命令行工具，因为这些都是以复刻 ChatGPT 的 web 端功能为目的编写的。你不需要记住太多，随时都可以通过 `!help` 进行查看。这些都是比较常用的命令：
+这些命令可以很方便的帮助我们使用这个命令行工具，因为这些都是以复刻 ChatGPT 的 web 端功能为目的编写的。你不需要记住太多，随时都可以通过 `!help`
+进行查看。这些都是比较常用的命令：
 
 - `!help` 呈现帮助信息，目前只有英文显示
 - `!show` 用来呈现当前会话的所有消息（以 Markdown 渲染的格式）
@@ -122,22 +135,26 @@ Features (under development):
 
 We have some todos for future improvements, such as:
 
-- [x] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
-- [ ] `!token`: Count tokens in conversation and display the total number
-- [ ] `!sum`: Generate a summary of the conversation to reduce token usage
-- [x] `!tmpl`: Choose system prompt templates
-- [ ] `!conv`: Show conversation list, Delete and Rename saved conversations
-- [ ] `!sys <command>`: Enable you to run system command
+- \[x\] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
+- \[ \] `!token`: Count tokens in conversation and display the total number
+- \[ \] `!sum`: Generate a summary of the conversation to reduce token usage
+- \[x\] `!tmpl`: Choose system prompt templates
+- \[ \] `!conv`: Show conversation list, Delete and Rename saved conversations
+- \[ \] `!sys <command>`: Enable you to run system command
 
 ## Contributing
 
-If you'd like to contribute to ChatGPT CLI, please feel free to submit a pull request or open an issue!
+If you'd like to contribute to ChatGPT CLI, please feel free to submit a pull request or
+open an issue!
 
 ## References
 
-- The idea of using the `rich.panel` package comes from [mbroton's chatgpt-api](https://github.com/mbroton/chatgpt-api).
-- The `!sum` command for generating a summary of the current conversation to guide the user in continuing the conversation is inspired by 沙漏/u202e.
+- The idea of using the `rich.panel` package comes from
+  [mbroton's chatgpt-api](https://github.com/mbroton/chatgpt-api).
+- The `!sum` command for generating a summary of the current conversation to guide the
+  user in continuing the conversation is inspired by 沙漏/u202e.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for
+details.

@@ -29,7 +29,7 @@ def get_config_path() -> str:
 
 
 def printpnl(
-        msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
+    msg: str, title="ChatGPT CLI", border_style="white", width=120, markdown=True
 ) -> None:
     print()
     if markdown:
@@ -264,7 +264,7 @@ class Conversation:
         if not content:
             printmd("**Last response is empty. Content not regenerated.**")
             return
-        self.__fill_content(- 1, content)
+        self.__fill_content(-1, content)
         assistant_output(self.messages[-1]["content"])
         printmd("**Last response regenerated.**")
 
@@ -367,8 +367,8 @@ class Conversation:
 
 
 def execute_command(
-        user_input: str,
-        conv: Conversation,
+    user_input: str,
+    conv: Conversation,
 ) -> str:
     user_input = user_input.strip()
     if user_input in ["!help", "help"]:
@@ -497,9 +497,7 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         printpnl(
             "**[API Connection Error]**\n. Please check your internet connection and try again."
         )
-        user_message = input(
-            "Do you want to retry now? (y/n): "
-        )
+        user_message = input("Do you want to retry now? (y/n): ")
         if user_message.strip().lower() == "y":
             return generate_response(messages)
         else:
@@ -515,9 +513,7 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         printpnl(
             "**[API Error]**\nThis might be caused by API outage. Please try again later."
         )
-        user_message = input(
-            "Do you want to retry now? (y/n): "
-        )
+        user_message = input("Do you want to retry now? (y/n): ")
         if user_message.strip().lower() == "y":
             return generate_response(messages)
         else:
@@ -527,9 +523,7 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         printpnl(
             "**[Rate Limit Error]**\nThis is caused by API outage. Please try again later."
         )
-        user_message = input(
-            "Do you want to retry now? (y/n): "
-        )
+        user_message = input("Do you want to retry now? (y/n): ")
         if user_message.strip().lower() == "y":
             return generate_response(messages)
         else:
