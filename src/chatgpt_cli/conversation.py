@@ -273,11 +273,13 @@ class Conversation:
     def switch_template(self, id):
         """Switch template"""
         self.template_object.id = id
-        roles = [msg['role'] for msg in self.template_object.templates[id]["prompts"]]
-        if 'system' in roles:
+        roles = [msg["role"] for msg in self.template_object.templates[id]["prompts"]]
+        if "system" in roles:
             self.default_prompt = list(self.template_object.templates[id]["prompts"])
         else:
-            self.default_prompt.extend(list(self.template_object.templates[id]["prompts"]))
+            self.default_prompt.extend(
+                list(self.template_object.templates[id]["prompts"])
+            )
         printmd(f"**Template switched to {self.template_object.get_name()}.**")
 
 
