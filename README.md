@@ -101,6 +101,7 @@ We've provided several commands to help you use this tool more conveniently. You
 - `!resend`: resends your last prompt to generate response
 - `!edit`: selects messages for editing
 - `!drop`: selects messages for deletion
+- `!editor`: use your default editor (e.g. vim) to submit a message
 - `!exit` or `!quit`: exits the program
 
 Features (under development):

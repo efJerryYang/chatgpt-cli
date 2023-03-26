@@ -105,6 +105,7 @@ proxy:
 - `!drop` 目前用于删除掉某一段消息，可以是 ChatGPT 的也可以是你发的
 - `!resend` 通常用于在发送失败的情况下，如遇到网络错误，重新发送上一次的消息
 - `!edit` 用于编辑会话，双方的话都可以编辑
+- `!editor`: 使用你的默认编辑器编辑你的想要发送的消息（如果系统环境变量没有设置，则默认为vim）
 - `!exit` 或者 `!quit` 退出，未保存的情况下也会提示是否保存
 
 Features (under development):
@@ -124,7 +125,7 @@ We have some todos for future improvements, such as:
 - [x] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
 - [ ] `!token`: Count tokens in conversation and display the total number
 - [ ] `!sum`: Generate a summary of the conversation to reduce token usage
-- [ ] `!tmpl`: Choose system prompt templates
+- [x] `!tmpl`: Choose system prompt templates
 - [ ] `!conv`: Show conversation list, Delete and Rename saved conversations
 - [ ] `!sys <command>`: Enable you to run system command
 
