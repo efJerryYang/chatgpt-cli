@@ -135,12 +135,12 @@ Features (under development):
 
 We have some todos for future improvements, such as:
 
-- \[x\] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
-- \[ \] `!token`: Count tokens in conversation and display the total number
-- \[ \] `!sum`: Generate a summary of the conversation to reduce token usage
-- \[x\] `!tmpl`: Choose system prompt templates
-- \[ \] `!conv`: Show conversation list, Delete and Rename saved conversations
-- \[ \] `!sys <command>`: Enable you to run system command
+- [x] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
+- [ ] `!token`: Count tokens in conversation and display the total number
+- [ ] `!sum`: Generate a summary of the conversation to reduce token usage
+- [x] `!tmpl`: Choose system prompt templates
+- [ ] `!conv`: Show conversation list, Delete and Rename saved conversations
+- [ ] `!sys <command>`: Enable you to run system command
 
 ## Contributing
 
