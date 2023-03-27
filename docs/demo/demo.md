@@ -2,8 +2,7 @@
 
 ## Features to Show
 
-- Include all commands like `!help`, `!show`, `!save`, `!load`, `!reset`, `!regen`,
-  `!resend`, `!edit`, `!drop` and `!quit`.
+- Include all commands like `!help`, `!show`, `!save`, `!load`, `!reset`, `!regen`, `!resend`, `!edit`, `!drop` and `!quit`.
 
 - Some branches to be displayed:
 
