@@ -120,7 +120,7 @@ def user_input(prompt="\nUser: ") -> str:
         # Update the prompt using readline
         prompt = "\r" + " " * len(prompt) + "\r" + " .... "
     # Print a message indicating that the input has been submitted
-    msg = "\n".join(lines).strip()
+    msg = "\n\n".join(lines).strip()
     if not msg:
         printmd("**[Empty Input Skipped]**")
     return msg
