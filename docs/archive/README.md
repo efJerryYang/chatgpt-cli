@@ -230,13 +230,13 @@ regardless of your current working directory.
 
 ## Todos
 
-- \[ \] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
-- \[ \] Fix inconsistent operation for `!edit` and `!drop`
-- \[ \] `!token`: Count tokens in conversation and display the total number
-- \[ \] `!sum`: Generate a summary of the conversation to reduce token usage
-- \[ \] `!tmpl`: Choose system prompt templates
-- \[ \] `!conv`: Show conversation list, Delete and Rename saved conversations
-- \[ \] `!sys <command>`: Enable you to run system command
+- [ ] Detect `[Ctrl]+[C]` hotkey and prompt to confirm exiting
+- [ ] Fix inconsistent operation for `!edit` and `!drop`
+- [ ] `!token`: Count tokens in conversation and display the total number
+- [ ] `!sum`: Generate a summary of the conversation to reduce token usage
+- [ ] `!tmpl`: Choose system prompt templates
+- [ ] `!conv`: Show conversation list, Delete and Rename saved conversations
+- [ ] `!sys <command>`: Enable you to run system command
 
 ## Contributing
 
