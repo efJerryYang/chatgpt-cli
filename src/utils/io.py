@@ -1,6 +1,7 @@
 import os
 import sys
 import tempfile
+import readline
 import subprocess
 from typing import Dict
 
@@ -119,6 +120,7 @@ def user_input(prompt="\nUser: ") -> str:
         lines.append(line)
         # Update the prompt using readline
         prompt = "\r" + " " * len(prompt) + "\r" + " .... "
+        readline.get_line_buffer()
     # Print a message indicating that the input has been submitted
     msg = "\n\n".join(lines).strip()
     if not msg:
