@@ -30,7 +30,7 @@ require version at least `3.8` because the feature of `importlib.metadata` is on
 available from this version. You'll also need an OpenAI API key, which you can easily
 [get here](https://platform.openai.com/account/api-keys).
 
-The required Yython packages can be installed with `pip install -r requirements.txt`,
+The required Python packages can be installed with `pip install -r requirements.txt`,
 which includes the following:
 
 - `openai >= 0.27.0`
