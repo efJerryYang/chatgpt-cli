@@ -48,7 +48,9 @@ def read_message(conv, tmpl):
     conv.add_user_message(user_message)
     printmd("**[Input Submitted]**")
 
-    assistant_message = generate_response(conv.messages)
+    with console.status("[bold green]Generating response..."):
+        assistant_message = generate_response(conv.messages)
+
     if assistant_message:
         assistant_output(assistant_message)
         conv.add_assistant_message(assistant_message)
