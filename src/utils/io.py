@@ -138,17 +138,17 @@ This tool is still under development, and we are working on improving the user e
 
 Here are some useful commands you may want to use:
 
-- `!help`: show this message
+- `!help` or `!h`: show this message
 - `!show`: show current conversation messages
 - `!save`: save current conversation to a `JSON` file
 - `!load`: load a conversation from a `JSON` file
 - `!new` or `!reset`: start a new conversation
+- `!editor` or `!e`: use your default editor (e.g. vim) to submit a message
 - `!regen`: regenerate the last response
 - `!resend`: resend your last prompt to generate response
 - `!edit`: select messages to edit
 - `!drop`: select messages to drop
-- `!editor`: use your default editor (e.g. vim) to submit a message
-- `!exit` or `!quit`: exit the program
+- `!exit` or `!quit` or `!q`: exit the program
 
 Features (under development):
 - `!tmpl` or `!tmpl load`: select a template to use

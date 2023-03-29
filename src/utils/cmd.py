@@ -27,6 +27,9 @@ def execute_command(
     elif user_msg in ["!new", "new", "reset", "!reset"]:
         conv.reset()
         conv.show_history(panel=False)
+    elif user_msg in ["!editor", "editor", "!e"]:
+        message = input_from_editor()
+        user_msg += " " + message
     elif user_msg in ["!resend", "resend"]:
         conv.resend()
     elif user_msg in ["!regen", "regen"]:
@@ -35,9 +38,6 @@ def execute_command(
         conv.edit_messages()
     elif user_msg in ["!drop", "drop"]:
         conv.drop_messages()
-    elif user_msg in ["!editor", "editor", "!e"]:
-        message = input_from_editor()
-        user_msg += " " + message
     elif user_msg in ["!exit", "!quit", "quit", "exit", "!q"]:
         conv.save(True)
         print("Bye!")

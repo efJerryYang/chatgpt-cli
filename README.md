@@ -124,17 +124,17 @@ We've provided several commands to help you use this tool more conveniently. You
 need to remember all of them at once, as you can type `!help` whenever you want to have a
 look. The following is a list a available commands:
 
-- `!help`: shows the help message
+- `!help` or `!h`: shows the help message
 - `!show`: displays the current conversation messages
 - `!save`: saves the current conversation to a `JSON` file
 - `!load`: loads a conversation from a `JSON` file
 - `!new` or `!reset`: starts a new conversation
+- `!editor` or `!e`: use your default editor (e.g. vim) to submit a message
 - `!regen`: regenerates the last response
 - `!resend`: resends your last prompt to generate response
 - `!edit`: selects messages for editing
 - `!drop`: selects messages for deletion
-- `!editor`: use your default editor (e.g. vim) to submit a message
-- `!exit` or `!quit`: exits the program
+- `!exit` or `!quit` or `!q`: exits the program
 
 Features (under development):
 
