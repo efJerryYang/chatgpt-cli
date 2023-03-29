@@ -15,7 +15,7 @@ def execute_command(
     tmpl: Template,
 ) -> str:
     user_msg = user_msg.strip()
-    if user_msg in ["!help", "help"]:
+    if user_msg in ["!help", "help", "!h"]:
         show_welcome_panel()
     elif user_msg in ["!show", "show"]:
         conv.show_history()
@@ -27,6 +27,9 @@ def execute_command(
     elif user_msg in ["!new", "new", "reset", "!reset"]:
         conv.reset()
         conv.show_history(panel=False)
+    elif user_msg in ["!editor", "editor", "!e"]:
+        message = input_from_editor()
+        user_msg += " " + message
     elif user_msg in ["!resend", "resend"]:
         conv.resend()
     elif user_msg in ["!regen", "regen"]:
@@ -35,10 +38,7 @@ def execute_command(
         conv.edit_messages()
     elif user_msg in ["!drop", "drop"]:
         conv.drop_messages()
-    elif user_msg in ["!editor", "editor"]:
-        message = input_from_editor()
-        user_msg += " " + message
-    elif user_msg in ["!exit", "!quit", "quit", "exit"]:
+    elif user_msg in ["!exit", "!quit", "quit", "exit", "!q"]:
         conv.save(True)
         print("Bye!")
         exit(0)
@@ -51,8 +51,8 @@ def execute_command(
 
 def post_command_process(user_message):
     # handle the return string of execute_command
-    pattern = re.compile(r"^!\w*\s*")
-    if user_message.startswith("!editor"):
+    pattern = re.compile(r"^!\w*\s+")
+    if user_message.startwith("!e ") or user_message.startswith("!editor "):
         user_message = pattern.sub("", user_message)
         user_output(user_message)
     else:
