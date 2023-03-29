@@ -9,10 +9,11 @@ from utils.file import *
 
 def generate_response(messages: List[Dict[str, str]]) -> str:
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
-            messages=messages,
-        )
+        with console.status("[bold green]Generating response..."):
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
+                messages=messages,
+            )
         assistant_message = response["choices"][0]["message"]["content"].strip()
         return assistant_message
     except openai.error.APIConnectionError as api_conn_err:
