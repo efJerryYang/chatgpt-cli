@@ -114,10 +114,12 @@ def user_input(prompt="\nUser: ") -> str:
     # Use readline to handle user input
     lines = []
     while True:
-        line = input(prompt)
-        if line.strip() == "":
+        line = input(prompt).strip()
+        if line == "":
             break
         lines.append(line)
+        if lines[0].startswith("!"):
+            break
         # Update the prompt using readline
         prompt = "\r" + " " * len(prompt) + "\r" + " .... "
         readline.get_line_buffer()
