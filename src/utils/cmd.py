@@ -51,8 +51,8 @@ def execute_command(
 
 def post_command_process(user_message):
     # handle the return string of execute_command
-    pattern = re.compile(r"^!\w*\s+")
-    if user_message.startwith("!e ") or user_message.startswith("!editor "):
+    pattern = re.compile(r"^!\w*\s*")
+    if user_message.startswith("!e ") or user_message.startswith("!editor "):
         user_message = pattern.sub("", user_message)
         user_output(user_message)
     else:
