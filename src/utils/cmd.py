@@ -55,6 +55,8 @@ def post_command_process(user_message):
     if user_message.startswith("!e ") or user_message.startswith("!editor "):
         user_message = pattern.sub("", user_message)
         user_output(user_message)
+        if not user_message:
+            printmd("**[Empty Input Skipped]**")
     else:
         user_message = pattern.sub("", user_message)
     return user_message
