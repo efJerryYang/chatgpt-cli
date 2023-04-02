@@ -6,7 +6,11 @@ from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 
+from utils.file import load_config
+
 console = Console()
+
+code_theme = load_config()["theme"]["code_theme"]
 
 
 def print(*args, **kwargs) -> None:
@@ -14,7 +18,7 @@ def print(*args, **kwargs) -> None:
 
 
 def printmd(msg: str, newline=True) -> None:
-    console.print(Markdown(msg))
+    console.print(Markdown(msg, code_theme=code_theme))
     if newline:
         print()
 

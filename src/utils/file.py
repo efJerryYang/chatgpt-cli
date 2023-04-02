@@ -158,21 +158,29 @@ def create_config_yaml():
             "content": "You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.",
         }
     ]
+    config["theme"] = {}
+    config["theme"]["code_theme"] = "monokai"
     save_config_yaml(config)
+
+
+def setup_new_config():
+    config_path = get_config_path()
+    show_setup_error_panel(config_path)
+
+    choose = input(
+        "Do you want to create a new `config.yaml` file or import an existing one? [y/i]: "
+    ).strip()
+    if choose.lower() == "i":
+        import_config_yaml()
+    else:
+        create_config_yaml()
 
 
 def load_config() -> Dict:
     # check setup
     config_path = get_config_path()
     if not os.path.exists(config_path):
-        show_setup_error_panel(config_path)
-        choose = input(
-            "Do you want to create a new `config.yaml` file or import an existing one? [y/i]: "
-        ).strip()
-        if choose.lower() == "i":
-            import_config_yaml()
-        else:
-            create_config_yaml()
+        setup_new_config()
     # load configurations from config.yaml
     with open(config_path, "r") as f:
         try:
@@ -189,7 +197,32 @@ def load_config() -> Dict:
         else:
             create_data_directory()
 
-    return config
+    if check_config_data(config):
+        return config
+    else:
+        return load_config()
+
+
+def check_config_data(config):
+    """
+    Ensure that the `config.yaml` is up to date. If it is not, then prompt to
+    update it.
+    """
+    dirty_flag = False
+    if config.get("openai", "") == "":
+        print("The section `openai` is not configured", config)
+        dirty_flag = True
+    elif config.get("proxy", "") == "":
+        print("The section `proxy` is not configured", config)
+        dirty_flag = True
+    elif config.get("theme", "") == "":
+        print("The section `theme` is not configured", config)
+        dirty_flag = True
+
+    if dirty_flag:
+        setup_new_config()
+        return False
+    return True
 
 
 def load_patch() -> Dict:
