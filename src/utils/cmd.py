@@ -1,6 +1,11 @@
-from chatgpt_cli.conversation import Conversation, Template
-from utils.io import *
 import re
+
+from chatgpt_cli.conversation import Conversation, Template
+
+from output.color_print import *
+from output.print import *
+from input.input import *
+from output.panel import *
 
 
 def is_command(user_msg: str) -> bool:

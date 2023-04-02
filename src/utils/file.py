@@ -1,10 +1,13 @@
+from typing import Callable, Dict, List
 import os
 import json
 import yaml
-from typing import Callable, Dict, List
 
 from chatgpt_cli import __version__
-from utils.io import *
+
+from output.color_print import *
+from output.panel import *
+from input.input import *
 
 
 def get_data_dir(create=True) -> str:
@@ -67,7 +70,7 @@ def load_data(messages: List[Dict[str, str]]) -> str:
         except (KeyboardInterrupt, EOFError):
             print("Aborting")
             exit(1)
-    printmd("**[Warning]**: Too many invalid inputs, starting a fresh one")
+    print_warning("Warning: Too many invalid inputs, starting a fresh one")
     return ""
 
 
@@ -86,15 +89,17 @@ def import_data_directory():
                         json.dump(data, f)
             break
         except FileNotFoundError:
-            printmd("**[File Not Found Error]**: Please check the path and try again")
+            print_warning(
+                "File Not Found Error: Please check the path and try again"
+            )
         except Exception as e:
-            printmd(f"**[Unknown Error]**: {e}")
-    printmd(f"**[Success]**: Data files imported to `{data_dir}`")
+            print_error(f"Unknown Error: {e}")
+    print_success(f"Success: Data files imported to `{data_dir}`")
 
 
 def create_data_directory():
     data_dir = get_data_dir()  # will create the data directory
-    printmd(f"**[Success]**: Data directory created at `{data_dir}`")
+    print_success(f"Success: Data directory created at `{data_dir}`")
 
 
 def get_config_dir() -> str:
@@ -113,7 +118,7 @@ def save_config_yaml(config: Dict):
     config_path = get_config_path()
     with open(config_path, "w") as f:
         yaml.dump(config, f, indent=2)
-    printmd(f"**[Success]**: `config.yaml` file saved to `{config_path}`")
+    print_success(f"Success: `config.yaml` file saved to `{config_path}`")
 
 
 def import_config_yaml():
@@ -125,14 +130,16 @@ def import_config_yaml():
                 config = yaml.safe_load(f)
             break
         except FileNotFoundError:
-            printmd("**[File Not Found Error]**: Please check the path and try again")
+            print_error(
+                "File Not Found Error: Please check the path and try again"
+            )
         except yaml.YAMLError:
-            printmd("**[YAML Error]**: Please check the file and try again")
+            print_error("YAML Error: Please check the file and try again")
         except Exception as e:
-            printmd(f"**[Unknown Error]**: {e}")
+            print_error(f"Unknown Error: {e}")
 
     if config is None:
-        printmd("**[Error]**: Failed to import `config.yaml` file after 3 attempts")
+        print_error("Error: Failed to import `config.yaml` file after 3 attempts")
         exit(1)
 
     save_config_yaml(config)
@@ -214,7 +221,7 @@ def save_patch(patch: Dict):
     patch_path = os.path.join(get_config_dir(), "patch.yaml")
     with open(patch_path, "w") as f:
         yaml.dump(patch, f, indent=2)
-    printmd(f"**[Success]**: `patch.yaml` file saved to `{patch_path}`")
+    print_success(f"Success: `patch.yaml` file saved to `{patch_path}`")
 
 
 def update_patch(operation: Callable):
@@ -227,7 +234,7 @@ def create_template(patch: Dict):
     """Create a new template in the `patch.yaml` file"""
     template_name = input("Enter template name: ").strip()
     if template_name == "":
-        printmd("**[Error]**: Template name cannot be empty")
+        print_error("Error: Template name cannot be empty")
         return
     template_alias = input("Enter template alias (leave blank to skip): ").strip()
     if template_alias == "":
@@ -235,13 +242,13 @@ def create_template(patch: Dict):
     template_list = patch.get("templates", [])
     for template in template_list:
         if template["name"] == template_name:
-            printmd(
-                f"**[Error]**: Template `{template_name}` already exists, pick another name"
+            print_error(
+                f"Error: Template `{template_name}` already exists, pick another name"
             )
             return
         if template_alias is not None and template["alias"] == template_alias:
-            printmd(
-                f"**[Warning]**: Template alias `{template_alias}` already exists, leaving it blank..."
+            print_warning(
+                f"Warning: Template alias `{template_alias}` already exists, leaving it blank..."
             )
             template_alias = None
 
@@ -266,7 +273,7 @@ def create_template(patch: Dict):
             elif r in ["a", "assistant"]:
                 role = "assistant"
             else:
-                printmd(f"**[Error]**: Invalid role `{role}`, please try again")
+                print_error(f"Error: Invalid role `{role}`, please try again")
                 continue
             message = {}
             message["role"] = role
@@ -281,7 +288,7 @@ def create_template(patch: Dict):
             input_error_handler(True, e)
             continue
     if len(template["prompts"]) == 0:
-        printmd("**[Warning]**: No prompts added, nothing to save")
+        print_warning("Warning: No prompts added, nothing to save")
         return
     # add reference
     check = input("Do you want to add references to the template? [y/n]: ").strip()
@@ -296,7 +303,9 @@ def create_template(patch: Dict):
                     break
                 reference["title"] = input("Enter reference title: ").strip()
                 if reference["title"] == "":
-                    printmd("**[Warning]**: Reference title is empty, skipping...")
+                    print_warning(
+                        "Warning: Reference title is empty, skipping..."
+                    )
                 template["references"].append(reference)
             except KeyboardInterrupt as e:
                 input_error_handler(True, e)
@@ -309,7 +318,7 @@ def create_template(patch: Dict):
     # save to file
     template_list.append(template)
     patch["templates"] = template_list
-    printmd(f"**[Success]**: Template `{template_name}` created")
+    print_success(f"Success: Template `{template_name}` created")
 
 
 def load_templates() -> List[Dict]:
@@ -319,8 +328,8 @@ def load_templates() -> List[Dict]:
 
 
 def edit_template(patch: Dict):
-    printpnl("**[Error]**: Not implemented yet")
+    print_error("Error: Not implemented yet")
 
 
 def drop_template(patch: Dict):
-    printpnl("**[Error]**: Not implemented yet")
+    print_error("Error: Not implemented yet")

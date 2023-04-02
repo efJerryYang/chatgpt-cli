@@ -2,9 +2,13 @@ import openai
 import os
 
 from chatgpt_cli.conversation import generate_response
-from utils.cmd import *
+
+from output.color_print import *
+from output.panel import *
+from input.input import *
+from output.print import *
 from utils.file import *
-from utils.io import *
+from utils.cmd import *
 
 
 def get_script_dir() -> str:

@@ -4,6 +4,9 @@ from typing import List
 import openai
 import os
 
+from output.color_print import *
+from input.input import *
+from output.print import *
 from utils.file import *
 
 
