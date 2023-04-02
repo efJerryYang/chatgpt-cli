@@ -8,6 +8,7 @@ from rich.panel import Panel
 
 console = Console()
 
+
 def print(*args, **kwargs) -> None:
     console.print(*args, **kwargs)
 

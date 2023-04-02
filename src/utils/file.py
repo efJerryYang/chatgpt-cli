@@ -89,9 +89,7 @@ def import_data_directory():
                         json.dump(data, f)
             break
         except FileNotFoundError:
-            print_warning(
-                "File Not Found Error: Please check the path and try again"
-            )
+            print_warning("File Not Found Error: Please check the path and try again")
         except Exception as e:
             print_error(f"Unknown Error: {e}")
     print_success(f"Success: Data files imported to `{data_dir}`")
@@ -130,9 +128,7 @@ def import_config_yaml():
                 config = yaml.safe_load(f)
             break
         except FileNotFoundError:
-            print_error(
-                "File Not Found Error: Please check the path and try again"
-            )
+            print_error("File Not Found Error: Please check the path and try again")
         except yaml.YAMLError:
             print_error("YAML Error: Please check the file and try again")
         except Exception as e:
@@ -303,9 +299,7 @@ def create_template(patch: Dict):
                     break
                 reference["title"] = input("Enter reference title: ").strip()
                 if reference["title"] == "":
-                    print_warning(
-                        "Warning: Reference title is empty, skipping..."
-                    )
+                    print_warning("Warning: Reference title is empty, skipping...")
                 template["references"].append(reference)
             except KeyboardInterrupt as e:
                 input_error_handler(True, e)
