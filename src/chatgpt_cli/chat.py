@@ -8,7 +8,7 @@ from output.panel import *
 from input.input import *
 from output.print import *
 from utils.file import *
-from utils.cmd import *
+from utils.command import *
 
 
 def get_script_dir() -> str:
