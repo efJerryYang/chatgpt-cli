@@ -193,7 +193,7 @@ class Conversation:
             if self.filepath:
                 filename = os.path.basename(self.filepath)
             else:
-                t = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+                t = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
                 tmp = f"conversation_{t}.json"
                 filename = input(f"Enter filename to save to [{tmp}]: ").strip()
                 if not filename:
