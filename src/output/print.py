@@ -10,7 +10,8 @@ from utils.file import load_config
 
 console = Console()
 
-code_theme = load_config()["theme"]["code_theme"]
+theme = load_config().get("theme", {"code_theme": "monokai"})
+code_theme = theme.get("code_theme", "monokai")
 
 
 def print(*args, **kwargs) -> None:
