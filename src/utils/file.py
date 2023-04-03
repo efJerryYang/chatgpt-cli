@@ -158,6 +158,7 @@ def create_config_yaml():
             "content": "You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.",
         }
     ]
+    # TODO: add prompt to setup code theme, give a list of available themes and display a preview
     config["theme"] = {}
     config["theme"]["code_theme"] = "monokai"
     save_config_yaml(config)
@@ -176,7 +177,40 @@ def setup_new_config():
         create_config_yaml()
 
 
-def load_config() -> Dict:
+def update_dirty_config(config: Dict, missing_keys: List[str]) -> None:
+    config_path = get_config_path()
+    show_dirty_config_panel(config_path, missing_keys)
+
+    # Prompt the user to setup the missing keys
+    for key in missing_keys:
+        if key == "openai":
+            config["openai"] = {}
+            config["openai"]["api_key"] = input("Enter your OpenAI API key: ").strip()
+            config["openai"]["default_prompt"] = [
+                {
+                    "role": "system",
+                    "content": "You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.",
+                }
+            ]
+        elif key == "proxy":
+            config["proxy"] = {}
+            config["proxy"]["http_proxy"] = input(
+                "Enter your HTTP proxy (leave blank if not needed): "
+            ).strip()
+            config["proxy"]["https_proxy"] = input(
+                "Enter your HTTPS proxy (leave blank if not needed): "
+            ).strip()
+        elif key == "theme":
+            config["theme"] = {}
+            config["theme"]["code_theme"] = "monokai"
+        else:
+            config[key] = {}
+            print_warning(f"Warning: Unknown key `{key}` found in your `config.yaml`")
+    # Store the updated config
+    save_config_yaml(config)
+
+
+def load_config() -> Dict[str, Dict]:
     # check setup
     config_path = get_config_path()
     if not os.path.exists(config_path):
@@ -196,31 +230,31 @@ def load_config() -> Dict:
             import_data_directory()
         else:
             create_data_directory()
-
+    # check if the config is up to date
     if check_config_data(config):
         return config
     else:
         return load_config()
 
 
-def check_config_data(config):
+def check_config_data(config: Dict[str, Dict]) -> bool:
     """
     Ensure that the `config.yaml` is up to date. If it is not, then prompt to
     update it.
     """
-    dirty_flag = False
+    # TODO: add more checks for specific keys, for example, `openai.api_key`
+    missing_keys = []
     if config.get("openai", "") == "":
         print("The section `openai` is not configured", config)
-        dirty_flag = True
-    elif config.get("proxy", "") == "":
+        missing_keys.append("openai")
+    if config.get("proxy", "") == "":
         print("The section `proxy` is not configured", config)
-        dirty_flag = True
-    elif config.get("theme", "") == "":
+        missing_keys.append("proxy")
+    if config.get("theme", "") == "":
         print("The section `theme` is not configured", config)
-        dirty_flag = True
-
-    if dirty_flag:
-        setup_new_config()
+        missing_keys.append("theme")
+    if missing_keys:
+        update_dirty_config(config, missing_keys)
         return False
     return True
 

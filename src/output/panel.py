@@ -73,3 +73,20 @@ You can also import an existing `config.yaml` file which is used in the script v
 If you don't have an OpenAI API key, you can get one at https://platform.openai.com/account/api-keys
 """
     printpnl(first_launch_msg, "ChatGPT CLI Setup", "red", 120)
+
+def show_dirty_config_panel(config_path: str, missing_keys: list):
+    """
+    Prompt the user to update their config file if it is outdated.
+    """
+    dirty_config_msg = f"""
+It looks like your config file is not up-to-date at `{config_path}`.
+
+The following keys are missing in your config file:
+
+{missing_keys}
+
+Notice that even if you don't need some of the optional key values, it is always recommended to add
+
+at least keys with empty values to your `config.yaml` file.
+"""
+    printpnl(dirty_config_msg, "ChatGPT CLI Update Config", "yellow", 120)
