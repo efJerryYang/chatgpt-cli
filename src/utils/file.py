@@ -180,7 +180,6 @@ def setup_new_config():
 def update_dirty_config(config: Dict, missing_keys: List[str]) -> None:
     config_path = get_config_path()
     show_dirty_config_panel(config_path, missing_keys)
-
     # Prompt the user to setup the missing keys
     for key in missing_keys:
         if key == "openai":
@@ -201,8 +200,12 @@ def update_dirty_config(config: Dict, missing_keys: List[str]) -> None:
                 "Enter your HTTPS proxy (leave blank if not needed): "
             ).strip()
         elif key == "theme":
+            # TODO: add prompt to setup code theme, give a list of available themes and display a preview
             config["theme"] = {}
             config["theme"]["code_theme"] = "monokai"
+            print_success(
+                "Success: Set default code theme to `monokai`. You can change it later in `config.yaml`"
+            )
         else:
             config[key] = {}
             print_warning(f"Warning: Unknown key `{key}` found in your `config.yaml`")
@@ -245,13 +248,13 @@ def check_config_data(config: Dict[str, Dict]) -> bool:
     # TODO: add more checks for specific keys, for example, `openai.api_key`
     missing_keys = []
     if config.get("openai", "") == "":
-        print("The section `openai` is not configured", config)
+        print_error("Error: The section `openai` is not configured")
         missing_keys.append("openai")
     if config.get("proxy", "") == "":
-        print("The section `proxy` is not configured", config)
+        print_warning("Warning: The section `proxy` is not configured")
         missing_keys.append("proxy")
     if config.get("theme", "") == "":
-        print("The section `theme` is not configured", config)
+        print_warning("Warning: The section `theme` is not configured")
         missing_keys.append("theme")
     if missing_keys:
         update_dirty_config(config, missing_keys)
