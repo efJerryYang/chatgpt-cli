@@ -100,7 +100,7 @@ def input_from_editor() -> str:
         tf.write(initial_message)
         tf.flush()
 
-        subprocess.call([editor, tf.name])
+        subprocess.call(f"{editor} '{tf.name}'", shell=True)
 
         tf.seek(0)
         msg = tf.read().decode().strip()
