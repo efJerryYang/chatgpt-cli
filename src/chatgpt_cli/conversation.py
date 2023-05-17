@@ -7,15 +7,24 @@ import os
 from utils.file import *
 
 
-def generate_response(messages: List[Dict[str, str]]) -> str:
+def generate_response(messages: List[Dict[str, str]], use_streaming: bool) -> str:
+
     try:
-        with console.status("[bold green]Generating response..."):
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
-                messages=messages,
-            )
-        assistant_message = response["choices"][0]["message"]["content"].strip()
-        return assistant_message
+       with console.status("[bold green]Preparing response..."):
+
+           response = openai.ChatCompletion.create(
+               model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
+               messages=messages,
+               stream=use_streaming,
+           )
+
+       if use_streaming:
+           for chunk in response:
+               if "content" not in chunk['choices'][0]['delta']: continue
+               yield(chunk['choices'][0]['delta']['content'])
+       else:
+           yield response["choices"][0]["message"]["content"].strip()
+
     except openai.error.APIConnectionError as api_conn_err:
         print(api_conn_err)
         printpnl(
@@ -23,7 +32,7 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         )
         user_message = input("Do you want to retry now? (y/n): ")
         if user_message.strip().lower() == "y":
-            return generate_response(messages)
+            return generate_response(messages, use_streaming)
         else:
             return ""
     except openai.error.InvalidRequestError as invalid_err:
@@ -39,7 +48,7 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         )
         user_message = input("Do you want to retry now? (y/n): ")
         if user_message.strip().lower() == "y":
-            return generate_response(messages)
+            return generate_response(messages, use_streaming)
         else:
             return ""
     except openai.error.RateLimitError as rate_err:
@@ -49,7 +58,7 @@ def generate_response(messages: List[Dict[str, str]]) -> str:
         )
         user_message = input("Do you want to retry now? (y/n): ")
         if user_message.strip().lower() == "y":
-            return generate_response(messages)
+            return generate_response(messages, use_streaming)
         else:
             return ""
     except Exception as e:
@@ -141,7 +150,7 @@ class Conversation:
         # Resend last prompt
         last_message = self.messages[-1]
         if last_message["role"] == "user":
-            assistant_message = generate_response(self.messages)
+            assistant_message = generate_response(self.messages, use_streaming)
             if not assistant_message:
                 printmd("**Last response is empty. Resend failed.**")
                 return
@@ -166,7 +175,7 @@ class Conversation:
                 "**Last message is user message. Nothing to regenerate. You may want to use `!resend` instead.**"
             )
             return
-        content = generate_response(self.messages[:-1])
+        content = generate_response(self.messages[:-1], use_streaming)
         if not content:
             printmd("**Last response is empty. Content not regenerated.**")
             return

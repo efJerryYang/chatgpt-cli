@@ -3,10 +3,13 @@ import sys
 import tempfile
 import readline
 import subprocess
+
 from typing import Dict
+from typing import Generator
 
 from rich import print
 from rich.console import Console
+from rich.live import Live
 from rich.markdown import Markdown
 from rich.panel import Panel
 
@@ -55,6 +58,17 @@ def user_output(msg: str) -> None:
 
 def assistant_output(msg: str) -> None:
     printmd("**ChatGPT:** {}".format(msg))
+
+
+def assistant_stream(gen: Generator[str, None, None]) -> str:
+    msg = '**ChatGPT:** '
+
+    with Live() as live:
+        for text in gen:
+            msg += text
+            live.update(Markdown(msg))
+
+    return msg
 
 
 def system_output(msg: str) -> None:

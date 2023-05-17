@@ -82,6 +82,8 @@ openai:
 proxy:
   http_proxy: http://yourproxyserver.com:8080
   https_proxy: http://yourproxyserver.com:8080
+chat:
+  use_streaming: false
 ```
 
 Remember to replace `http://yourproxyserver.com:8080` with the address and port of your
@@ -96,6 +98,14 @@ openai:
     - role: system
       content: You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.
 # no proxy field is okay to run this tool
+```
+
+You can enable output streaming by setting `use_streaming` to `true` in the `chat` section
+of `config.yaml`:
+
+```
+chat:
+  use_streaming: false
 ```
 
 ## Running the Tool
