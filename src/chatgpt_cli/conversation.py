@@ -70,9 +70,10 @@ def generate_response(messages: List[Dict[str, str]], use_streaming: bool) -> st
 
 
 class Conversation:
-    def __init__(self, default_prompt: List[Dict[str, str]]) -> None:
+    def __init__(self, default_prompt: List[Dict[str, str]], use_streaming: bool) -> None:
         self.messages = list(default_prompt)
         self.default_prompt = list(default_prompt)
+        self.use_streaming = use_streaming
         self.filepath = ""
         self.modified = False
         self.template_object = Template()
@@ -150,13 +151,23 @@ class Conversation:
         # Resend last prompt
         last_message = self.messages[-1]
         if last_message["role"] == "user":
-            assistant_message = generate_response(self.messages, use_streaming)
+
+            assistant_message_gen = generate_response(self.messages, self.use_streaming)
+
+            if self.use_streaming == True:
+                assistant_message = assistant_stream(assistant_message_gen)
+            else:
+                assistant_message = list(assistant_message_gen)[0]
+
             if not assistant_message:
                 printmd("**Last response is empty. Resend failed.**")
                 return
+
+            if self.use_streaming == False: assistant_output(assistant_message)
+
             self.add_assistant_message(assistant_message)
             printmd("**Last prompt resent.**")
-            assistant_output(assistant_message)
+
         else:
             printmd("**Last message is assistant message. Nothing to resend.**")
 
@@ -175,12 +186,17 @@ class Conversation:
                 "**Last message is user message. Nothing to regenerate. You may want to use `!resend` instead.**"
             )
             return
-        content = generate_response(self.messages[:-1], use_streaming)
+
+        content_gen = generate_response(self.messages[:-1], self.use_streaming)
+
+        if self.use_streaming == True: content = assistant_stream(content_gen)
+        else: content = list(content_gen)[0]
+
         if not content:
             printmd("**Last response is empty. Content not regenerated.**")
             return
         self.__fill_content(-1, content)
-        assistant_output(self.messages[-1]["content"])
+        if self.use_streaming == False: assistant_output(self.messages[-1]["content"])
         printmd("**Last response regenerated.**")
 
     def __fill_content(self, index: int, content: str) -> None:

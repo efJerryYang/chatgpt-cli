@@ -76,7 +76,7 @@ def main():
     default_prompt = config["openai"]["default_prompt"]
     show_welcome_panel()
 
-    conv = Conversation(default_prompt)
+    conv = Conversation(default_prompt, use_streaming)
     conv.show_history()
 
     tmpl = Template()
