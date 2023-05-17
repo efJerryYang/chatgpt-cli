@@ -49,12 +49,17 @@ def read_message(conv, tmpl, use_streaming):
     printmd("**[Input Submitted]**")
 
     if use_streaming == True:
-        assistant_message = assistant_stream(generate_response(conv.messages, use_streaming))
+        assistant_message = assistant_stream(
+            generate_response(conv.messages, use_streaming)
+        )
     else:
-        assistant_message = "".join(list(generate_response(conv.messages, use_streaming)))
+        assistant_message = "".join(
+            list(generate_response(conv.messages, use_streaming))
+        )
 
     if assistant_message:
-        if use_streaming == False: assistant_output(assistant_message)
+        if use_streaming == False:
+            assistant_output(assistant_message)
         conv.add_assistant_message(assistant_message)
     else:
         conv.save(True)
@@ -71,7 +76,7 @@ def loop(conv, tmpl, use_streaming):
 
 def main():
     config = setup_runtime_env()
-    use_streaming = config.get('chat', {}).get('use_streaming', False)
+    use_streaming = config.get("chat", {}).get("use_streaming", False)
 
     default_prompt = config["openai"]["default_prompt"]
     show_welcome_panel()
