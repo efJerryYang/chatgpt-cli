@@ -64,7 +64,7 @@ def assistant_stream(gen: Generator[str, None, None]) -> str:
 
     msg = ''
 
-    with Live() as live:
+    with Live(vertical_overflow='visible') as live:
         for text in gen:
             msg += text
             live.update(Markdown('**ChatGPT:** ' + msg))
