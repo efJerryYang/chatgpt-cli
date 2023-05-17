@@ -8,22 +8,21 @@ from utils.file import *
 
 
 def generate_response(messages: List[Dict[str, str]], use_streaming: bool) -> str:
-
     try:
-       with console.status("[bold green]Preparing response..."):
+        with console.status("[bold green]Preparing response..."):
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
+                messages=messages,
+                stream=use_streaming,
+            )
 
-           response = openai.ChatCompletion.create(
-               model="gpt-3.5-turbo",  # or gpt-3.5-turbo-0301
-               messages=messages,
-               stream=use_streaming,
-           )
-
-       if use_streaming:
-           for chunk in response:
-               if "content" not in chunk['choices'][0]['delta']: continue
-               yield(chunk['choices'][0]['delta']['content'])
-       else:
-           yield response["choices"][0]["message"]["content"].strip()
+        if use_streaming:
+            for chunk in response:
+                if "content" not in chunk["choices"][0]["delta"]:
+                    continue
+                yield (chunk["choices"][0]["delta"]["content"])
+        else:
+            yield response["choices"][0]["message"]["content"].strip()
 
     except openai.error.APIConnectionError as api_conn_err:
         print(api_conn_err)
@@ -70,7 +69,9 @@ def generate_response(messages: List[Dict[str, str]], use_streaming: bool) -> st
 
 
 class Conversation:
-    def __init__(self, default_prompt: List[Dict[str, str]], use_streaming: bool) -> None:
+    def __init__(
+        self, default_prompt: List[Dict[str, str]], use_streaming: bool
+    ) -> None:
         self.messages = list(default_prompt)
         self.default_prompt = list(default_prompt)
         self.use_streaming = use_streaming
@@ -151,7 +152,6 @@ class Conversation:
         # Resend last prompt
         last_message = self.messages[-1]
         if last_message["role"] == "user":
-
             assistant_message_gen = generate_response(self.messages, self.use_streaming)
 
             if self.use_streaming == True:
@@ -163,7 +163,8 @@ class Conversation:
                 printmd("**Last response is empty. Resend failed.**")
                 return
 
-            if self.use_streaming == False: assistant_output(assistant_message)
+            if self.use_streaming == False:
+                assistant_output(assistant_message)
 
             self.add_assistant_message(assistant_message)
             printmd("**Last prompt resent.**")
@@ -189,14 +190,17 @@ class Conversation:
 
         content_gen = generate_response(self.messages[:-1], self.use_streaming)
 
-        if self.use_streaming == True: content = assistant_stream(content_gen)
-        else: content = list(content_gen)[0]
+        if self.use_streaming == True:
+            content = assistant_stream(content_gen)
+        else:
+            content = list(content_gen)[0]
 
         if not content:
             printmd("**Last response is empty. Content not regenerated.**")
             return
         self.__fill_content(-1, content)
-        if self.use_streaming == False: assistant_output(self.messages[-1]["content"])
+        if self.use_streaming == False:
+            assistant_output(self.messages[-1]["content"])
         printmd("**Last response regenerated.**")
 
     def __fill_content(self, index: int, content: str) -> None:
