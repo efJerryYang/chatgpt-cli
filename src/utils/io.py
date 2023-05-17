@@ -61,12 +61,13 @@ def assistant_output(msg: str) -> None:
 
 
 def assistant_stream(gen: Generator[str, None, None]) -> str:
-    msg = '**ChatGPT:** '
+
+    msg = ''
 
     with Live() as live:
         for text in gen:
             msg += text
-            live.update(Markdown(msg))
+            live.update(Markdown('**ChatGPT:** ' + msg))
 
     return msg
 
