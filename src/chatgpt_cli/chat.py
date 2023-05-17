@@ -34,7 +34,7 @@ def setup_runtime_env() -> Dict:
     return config
 
 
-def read_message(conv, tmpl):
+def read_message(conv, tmpl, use_streaming):
     user_message = user_input()
 
     if is_command(user_message):
@@ -48,18 +48,21 @@ def read_message(conv, tmpl):
     conv.add_user_message(user_message)
     printmd("**[Input Submitted]**")
 
-    assistant_message = generate_response(conv.messages)
+    if use_streaming == True:
+        assistant_message = assistant_stream(generate_response(conv.messages, use_streaming))
+    else:
+        assistant_message = "".join(list(generate_response(conv.messages, use_streaming)))
 
     if assistant_message:
-        assistant_output(assistant_message)
+        if use_streaming == False: assistant_output(assistant_message)
         conv.add_assistant_message(assistant_message)
     else:
         conv.save(True)
 
 
-def loop(conv, tmpl):
+def loop(conv, tmpl, use_streaming):
     try:
-        read_message(conv, tmpl)
+        read_message(conv, tmpl, use_streaming)
     except KeyboardInterrupt as e:
         input_error_handler(conv.modified, e)
     except EOFError as e:
@@ -68,6 +71,8 @@ def loop(conv, tmpl):
 
 def main():
     config = setup_runtime_env()
+    use_streaming = config.get('chat', {}).get('use_streaming', False)
+
     default_prompt = config["openai"]["default_prompt"]
     show_welcome_panel()
 
@@ -76,7 +81,7 @@ def main():
 
     tmpl = Template()
     while True:
-        loop(conv, tmpl)
+        loop(conv, tmpl, use_streaming)
 
 
 if __name__ == "__main__":

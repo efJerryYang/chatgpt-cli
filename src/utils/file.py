@@ -155,6 +155,9 @@ def create_config_yaml():
             "content": "You are ChatGPT, a language model trained by OpenAI. Now you are responsible for answering any questions the user asks.",
         }
     ]
+    config["chat"] = {}
+    config["chat"]["use_streaming"] = False
+
     save_config_yaml(config)
 
 
