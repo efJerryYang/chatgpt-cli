@@ -113,6 +113,8 @@ openai:
 proxy:
   http_proxy: http://127.0.0.1:7890
   https_proxy: http://127.0.0.1:7890
+chat:
+  use_streaming: true
 ```
 
 You can remove the `proxy` section or leave its value empty if you do not need to use a
