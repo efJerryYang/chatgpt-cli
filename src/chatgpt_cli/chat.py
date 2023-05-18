@@ -64,6 +64,9 @@ def read_message(conv, tmpl, use_streaming):
     else:
         conv.save(True)
 
+    if use_streaming:
+        conv.show_history()
+
 
 def loop(conv, tmpl, use_streaming):
     try:
