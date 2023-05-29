@@ -20,7 +20,7 @@ openai==0.27.2
 packaging==23.0
 pathspec==0.11.1
 platformdirs==3.2.0
-pyreadline3==3.4.1
+pyreadline3==3.4.1; platform_system=='Windows'
 Pygments==2.14.0
 PyYAML==6.0
 requests==2.28.2
